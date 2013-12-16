@@ -71,6 +71,13 @@ DeclareProperty( "IsIntegral",
 DeclareProperty( "IsIntegral",
                  IsVirtualCohomologyTable );
 
+## IsVirtualCohomologyTable
+#! @Description Returns true if every entry of the given virtual cohomology table is zero.
+#! @Arguments virtual_cohomology_table
+DeclareProperty( "IsZero",
+                 IsVirtualCohomologyTable );
+                 
+
 #################################
 ##
 ## Attributes
@@ -195,12 +202,34 @@ DeclareAttribute( "BettiTable",
 DeclareAttribute( "HilbertPolynomial",
                   IsVirtualCohomologyTable );
 
-#! @Description Computes the interval of the minimal ambient space of the given virtual cohomology table
+#! @Description Computes the interval spanned by the root sequences of the internal representation.
+#! Note that this is not an attribute of a virtual cohomology table as a mathematical object.
 #! @Returns an interval of root sequences
 #! @Arguments virtual_cohomology_table                     
-DeclareAttribute( "IntervalOfMinimalAmbientSpace",
+# DeclareAttribute( "IntervalOfMinimalAmbientSpace",
+DeclareAttribute( "IntervalSpannedByRepresentation",
                   IsVirtualCohomologyTable );
 
+#! @Description Computes the smallest right boundary in which the virtual cohomology table lies. If
+#! the input is the zero table, then the function returns the empty list.
+#! @Returns an interval of root sequences
+#! @Arguments virtual_cohomology_table                  
+DeclareAttribute( "RightBoundaryOfMinimalInterval",
+                  IsVirtualCohomologyTable );
+                  
+#! @Description Computes the Boij Söderberg decomposition of a cohomology table.
+#! @Returns a linear combination of cohomology tables with supernatural cohomology
+#! @Arguments virtual_cohomology_table
+DeclareAttribute( "BoijSoederbergDecomposition",
+                  IsVirtualCohomologyTable );
+
+#NOT CORRECT
+#! @Description Computes the interval of the minimal ambient space of the given virtual Hilbert polynomial
+#! @Returns an interval of root sequences
+#! @Arguments virtual_hilbert_polynomial                         
+DeclareAttribute( "IntervalOfMinimalAmbientSpace",
+                  IsVirtualHilbertPolynomial );
+                  
 ## IsVirtualHilbertPolynomial
 #! @Description Returns the underlying polynomial of the given virtual Hilbert polynomial.
 #! @Returns a polynomial
@@ -483,7 +512,13 @@ DeclareOperation( "VirtualHilbertPolynomial",
 #! @Arguments virtual_cohomology_table
 DeclareOperation( "VirtualHilbertPolynomial",
                   [ IsVirtualCohomologyTable ] );
-                  
+
+#! @Description Constructs a virtual Hilbert polynomial associated to the given Chern polynomial with rank.
+#! @Returns a virtual Hilbert polynomial
+#! @Arguments chern_polynomial_with_rank
+DeclareOperation( "VirtualHilbertPolynomial",
+                  [ IsChernPolynomialWithRank ] );
+
 #! @Description
 #! The input is a map <M>V \rightarrow W</M> of <M>\mathbb{Q}</M>-spaces. The basis of the pushed presentation
 #! to W will be the lattice basis of the output.

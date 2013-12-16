@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_BoijSoederberg">
+<Heading>BoijSoederberg</Heading>
+
+<Section Label="Chapter_BoijSoederberg_Section_Properties">
+<Heading>Properties</Heading>
+
+<ManSection>
+  <Prop Arg="vector_space_with_integral_structure" Name="IsEmbedded" Label="for IsVectorSpaceWithIntegralStructure"/>
+ <Returns><C>true</C> or <C>false</C></Returns>
+ <Description>
+    Returns true if the given vector space with integral structure has an embedding into a super space, false otherwise.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Prop Arg="vector_space_with_integral_structure" Name="IsConcrete" Label="for IsVectorSpaceWithIntegralStructure"/>
+ <Returns><C>true</C> or <C>false</C></Returns>
+ <Description>
+    Returns true if the given vector space with integral structure has a concrete presentation, false otherwise.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Prop Arg="virtual_hilbert_polynomial" Name="IsIntegral" Label="for IsVirtualHilbertPolynomial"/>
+ <Returns><C>true</C> or <C>false</C></Returns>
+ <Description>
+    Returns true if the given virtual Hilbert polynomial has only integral values, false otherwise.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Prop Arg="virtual_cohomology_table" Name="IsIntegral" Label="for IsVirtualCohomologyTable"/>
+ <Returns><C>true</C> or <C>false</C></Returns>
+ <Description>
+    Returns true if the given virtual cohomology table has only integral values, false otherwise.
+ </Description>
+</ManSection>
+
+</Section>
+
+<Section Label="Chapter_BoijSoederberg_Section_Attributes">
+<Heading>Attributes</Heading>
+
+<ManSection>
+  <Attr Arg="poset_of_root_sequences" Name="LengthOfRootSequences" Label="for IsPosetOfRootSequences"/>
+ <Returns>a positive integer</Returns>
+ <Description>
+    Returns the length of the root sequence in this poset.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="root_sequence" Name="UnderlyingPosetOfRootSequences" Label="for IsRootSequence"/>
+ <Returns>a poset of root sequences</Returns>
+ <Description>
+    Returns the poset of root sequence in which the given root sequence lies.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="root_sequence" Name="HilbertPolynomial" Label="for IsRootSequence"/>
+ <Returns>a virtual Hilbert polynomial</Returns>
+ <Description>
+    Computes the virtual Hilbert polynomial associated to the virtual vector bundle of rank 1 with supernatural cohomology given by
+    the root sequence.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="root_sequence" Name="CohomologyTable" Label="for IsRootSequence"/>
+ <Returns>a virtual cohomology table</Returns>
+ <Description>
+    Computes the virtual cohomology table associated to the virtual vector bundle of rank 1 with supernatural cohomology given by
+    the root sequence.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="interval_of_root_sequences" Name="Category" Label="for IsIntervalOfRootSequences"/>
+ <Returns>a Homalg category</Returns>
+ <Description>
+    Returns the category of intervals of root sequences.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="interval_of_root_sequences" Name="UnderlyingPosetOfRootSequences" Label="for IsIntervalOfRootSequences"/>
+ <Returns>a poset of root sequences</Returns>
+ <Description>
+    Returns the poset of root sequences in which all root sequences within the given interval lie in.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="interval_of_root_sequences" Name="LeftBoundary" Label="for IsIntervalOfRootSequences"/>
+ <Returns>a root sequence</Returns>
+ <Description>
+    Returns the left boundary of the given interval of root sequences.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="interval_of_root_sequences" Name="RightBoundary" Label="for IsIntervalOfRootSequences"/>
+ <Returns>a root sequence</Returns>
+ <Description>
+    Returns the right boundary of the given interval of root sequences.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="interval_of_root_sequences" Name="UnderlyingSet" Label="for IsIntervalOfRootSequences"/>
+ <Returns>a set of root sequences</Returns>
+ <Description>
+    Computes the underlying set of the given interval of root sequences.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="interval_of_root_sequences" Name="TopMaximalChain" Label="for IsIntervalOfRootSequences"/>
+ <Returns>a list of root sequences</Returns>
+ <Description>
+    Computes the largest maximal chain of the given interval of root sequences.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="interval_of_root_sequences" Name="TopMaximalHilbertChain" Label="for IsIntervalOfRootSequences"/>
+ <Returns>a list of root sequences</Returns>
+ <Description>
+    Computes a chain of root sequences whose corresponding Hilbert polynomials form a basis of the
+    vector space of Hilbert polynomials within <A>interval_of_root_sequences</A>.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="interval_of_root_sequences" Name="KernelEntries" Label="for IsIntervalOfRootSequences"/>
+ <Returns>a list of pairs of integers</Returns>
+ <Description>
+    Computes the entries of a cohomology table within <A>interval_of_root_sequences</A>
+    which can be modified without changing the Hilbert polynomial.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="morphism_of_intervals_of_root_sequences" Name="Source" Label="for IsMorphismOfIntervalsOfRootSequences"/>
+ <Returns>an interval of root sequences</Returns>
+ <Description>
+    Returns the source of the given morphism of intervals of root sequences.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="morphism_of_intervals_of_root_sequences" Name="Range" Label="for IsMorphismOfIntervalsOfRootSequences"/>
+ <Returns>an interval of root sequences</Returns>
+ <Description>
+    Returns the range of the given morphism of intervals of root sequences.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="virtual_cohomology_table" Name="UnderlyingPosetOfRootSequences" Label="for IsVirtualCohomologyTable"/>
+ <Returns>a poset of root sequences</Returns>
+ <Description>
+    Returns the poset of root sequences associated to the given virtual cohomology table.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="virtual_cohomology_table" Name="BettiTable" Label="for IsVirtualCohomologyTable"/>
+ <Returns>a Homalg Betti table</Returns>
+ <Description>
+    Computes the Betti table of the given virtual cohomology table
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="virtual_cohomology_table" Name="HilbertPolynomial" Label="for IsVirtualCohomologyTable"/>
+ <Returns>a polynomial</Returns>
+ <Description>
+    Computes the Hilbert polynomial of the given virtual cohomology table
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="virtual_cohomology_table" Name="IntervalOfMinimalAmbientSpace" Label="for IsVirtualCohomologyTable"/>
+ <Returns>an interval of root sequences</Returns>
+ <Description>
+    Computes the interval of the minimal ambient space of the given virtual cohomology table
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="virtual_hilbert_polynomial" Name="UnderlyingPolynomial" Label="for IsVirtualHilbertPolynomial"/>
+ <Returns>a polynomial</Returns>
+ <Description>
+    Returns the underlying polynomial of the given virtual Hilbert polynomial.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="virtual_hilbert_polynomial" Name="EmbeddingIntoSuperVectorSpace" Label="for IsVirtualHilbertPolynomial"/>
+ <Returns>a Homalg map</Returns>
+ <Description>
+    Computes the embedding of the one dimensional vector space spanned by the given virtual Hilbert polynomial
+    into the vector space of all virtual Hilbert polynomials.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="virtual_hilbert_polynomial" Name="K0ElementOfStableModuleCategory" Label="for IsVirtualHilbertPolynomial"/>
+ <Returns>an element of a graded relative ring</Returns>
+ <Description>
+    Computes the corresponding element in the Grothendieck Group of stable modules over the exterior algebra.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="virtual_hilbert_polynomial" Name="TwistedChernPolynomial" Label="for IsVirtualHilbertPolynomial"/>
+ <Returns>A list with an integer and a chern polynomial with rank</Returns>
+ <Description>
+    Computes a pair containing the normalized Chern polynomial together with the twist which was needed for normalization.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="vector_space_with_integral_structure" Name="UnderlyingStructureMorphism" Label="for IsVectorSpaceWithIntegralStructure"/>
+ <Returns>a homalg map</Returns>
+ <Description>
+    Returns the underlying structure morphism which defines the lattice of the input.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="vector_space_with_integral_structure" Name="UnderlyingVectorSpace" Label="for IsVectorSpaceWithIntegralStructure"/>
+ <Returns>a Homalg module</Returns>
+ <Description>
+    Returns the underlying vector space, i.e., the vector space without the integral structure.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="vector_space_with_integral_structure" Name="Dimension" Label="for IsVectorSpaceWithIntegralStructure"/>
+ <Returns>a non-negative integer</Returns>
+ <Description>
+    Returns the dimension of the given vector space with integral structure.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="vector_space_with_integral_structure" Name="EmbeddingIntoSuperVectorSpace" Label="for IsVectorSpaceWithIntegralStructure and IsEmbedded"/>
+ <Returns>a vector space with integral structure</Returns>
+ <Description>
+    Returns the embedding of an embedded vector space with integral structure.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="vector_space_with_integral_structure" Name="PositionOfConcretePresentation" Label="for IsVectorSpaceWithIntegralStructure and IsConcrete"/>
+ <Returns>a positive integer</Returns>
+ <Description>
+    Returns the position of the concrete presentation of the given concrete vector space with integral structure.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="morphism_of_vector_spaces_with_integral_structure" Name="UnderlyingMorphism" Label="for IsMorphismOfVectorSpacesWithIntegralStructure"/>
+ <Returns>a Homalg map</Returns>
+ <Description>
+    Returns the underlying morphism of <A>\mathbb{Q}</A>-spaces of the given morphism of vector spaces with integral structure
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="morphism_of_vector_spaces_with_integral_structure" Name="Source" Label="for IsMorphismOfVectorSpacesWithIntegralStructure"/>
+ <Returns>a vector space with integral structure</Returns>
+ <Description>
+    Returns the source of the given morphism.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="morphism_of_vector_spaces_with_integral_structure" Name="Range" Label="for IsMorphismOfVectorSpacesWithIntegralStructure"/>
+ <Returns>a vector space with integral structure</Returns>
+ <Description>
+    Returns the range of the given morphism.
+ </Description>
+</ManSection>
+
+</Section>
+
+<Section Label="Chapter_BoijSoederberg_Section_Operations">
+<Heading>Operations</Heading>
+
+<ManSection>
+  <Oper Arg="virtual_hilbert_polynomial, rational" Name="Value" Label="for IsVirtualHilbertPolynomial, IsRat"/>
+ <Returns>a rational number</Returns>
+ <Description>
+    Computes the value of <A>virtual_hilbert_polynomial</A> at <A>rational</A>
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="root_sequence_1, root_sequence_2" Name="Infimum" Label="for IsRootSequence, IsRootSequence"/>
+ <Returns>a root sequence</Returns>
+ <Description>
+    Computes the infimum of <A>root_sequence_1</A> and <A>root_sequence_2</A> regarded as elements of
+    the poset of all root sequences
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="list_of_root_sequences" Name="Infimum" Label="for IsList"/>
+ <Returns>a root sequence</Returns>
+ <Description>
+    The input is a list of root sequences. The operation returns the infimum of all elements in the given list.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="root_sequence_1, root_sequence_2" Name="Supremum" Label="for IsRootSequence, IsRootSequence"/>
+ <Returns>a root sequence</Returns>
+ <Description>
+    Computes the supremum of <A>root_sequence_1</A> and <A>root_sequence_2</A> regarded as elements of
+    the poset of all root sequences.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="list_of_root_sequences" Name="Supremum" Label="for IsList"/>
+ <Returns>a root sequence</Returns>
+ <Description>
+    The input is a list of root sequences. The operation returns the supremum of all elements in the given list.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="polynomial, degree" Name="RowOfCoefficients" Label="for IsLaurentPolynomial, IsInt"/>
+ <Returns>a list</Returns>
+ <Description>
+    The input is a list of root sequences. The operation returns the list of coefficients of the given polynomial up to degree <A>degree</A>.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="list_of_integers" Name="SetDisplayInterval" Label="for IsList"/>
+ <Returns>nothing</Returns>
+ <Description>
+    Sets the display interval of virtual cohomology tables. Every list of integers is accepted as an input.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="interval_of_root_sequences, rank, filter" Name="AllHilbertPolynomials" Label="for IsIntervalOfRootSequences, IsInt, IsBool"/>
+ <Returns>a list</Returns>
+ <Description>
+    This operation uses the Boij-Soederberg cone. If <A>filter = true</A> (default) this operation
+    also takes into consideration that a vector bundle of rank <M>r</M> has vanishing Chern classes <M>c_l</M> for
+    <M>l > r</M>. It computes all Hilbert polynomials (and if <A>filter = true</A> also the corresponding Chern polynomials
+    with shift) within the given interval which cannot be excluded by combinatorial means to be associated to vector bundles with given rank.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="interval_of_root_sequences, virtual_hilbert_polynomial" Name="AllCohomologyTables" Label="for IsIntervalOfRootSequences, IsVirtualHilbertPolynomial"/>
+ <Returns>a list</Returns>
+ <Description>
+    This operation uses the Boij-Soederberg cone. It computes all virtual cohomology tables within the given interval
+    which cannot be excluded by combinatorial means to be associated to vector bundles with given Hilbert polynomial.
+ </Description>
+</ManSection>
+
+</Section>
+
+<Section Label="Chapter_BoijSoederberg_Section_Constructors">
+<Heading>Constructors</Heading>
+
+<ManSection>
+  <Oper Arg="length_of_root_sequences" Name="PosetOfRootSequences" Label="for IsInt"/>
+ <Returns>a poset of root sequences</Returns>
+ <Description>
+    Constructs a poset of root sequences of given length.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Func Arg="list[,poset_of_root_sequences]" Name="RootSequence" />
+ <Returns>a root sequence</Returns>
+ <Description>
+    The first argument is a list
+    of integers, not necessarily sorted, which also may contain duplicates.
+    The second optional argument is a poset of root sequences of which the constructed
+    root sequence shall be an element. If no second argument is given, a
+    standard poset of root sequences will be created and cached.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="root_sequence_1, root_sequence_2" Name="IntervalOfRootSequences" Label="for IsRootSequence, IsRootSequence"/>
+ <Returns>an interval of root sequences</Returns>
+ <Description>
+    The two arguments define the left boundary and the right boundary
+    of an interval of root sequences. The first argument must be smaller or equal
+    to the second argument. This operation constructs an interval of root sequences [ <A>root_sequence_1</A> .. <A>root_sequence_2</A> ].
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="root_sequence" Name="IntervalOfRootSequences" Label="for IsRootSequence"/>
+ <Returns>an interval of root sequences</Returns>
+ <Description>
+    Constructs the trivial interval of root sequences [ root_sequence .. root_sequence ].
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="interval_of_root_sequences_source, interval_of_root_sequences_range" Name="MorphismOfIntervalsOfRootSequences" Label="for IsIntervalOfRootSequences, IsIntervalOfRootSequences"/>
+ <Returns>a morphism of intervals of root sequences</Returns>
+ <Description>
+    The interval_of_root_sequences_source must be contained in interval_of_root_sequences_source.
+    It constructs a morphism from <A>interval_of_root_sequences_source</A> to <A>interval_of_root_sequences_range</A>.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="list" Name="VirtualCohomologyTable" Label="for IsList"/>
+ <Returns>a virtual cohomology table</Returns>
+ <Description>
+    The argument must be a list of pairs consisting of a rational number and a root sequence.
+    This operation constructs a virtual cohomology table which corresponds to the linear combination given by list.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="list, interval_of_root_sequences" Name="VirtualCohomologyTable" Label="for IsList, IsIntervalOfRootSequences"/>
+ <Returns>a virtual cohomology table</Returns>
+ <Description>
+    The first argument is a list of rational numbers. This operation constructs a virtual cohomology table computed as linear combination with coefficients given in <A>list</A>
+    and vectors given as the top maximal chain of the <A>interval_of_root_sequences</A>.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="list_of_coefficients" Name="VirtualHilbertPolynomial" Label="for IsList"/>
+ <Returns>a virtual Hilbert polynomial</Returns>
+ <Description>
+    The argument is a list of rational numbers, where the i-th argument contains the i-1-th coefficient of
+    the virtual Hilbert polynomial to be constructed.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="polynomial" Name="VirtualHilbertPolynomial" Label="for IsLaurentPolynomial"/>
+ <Returns>a virtual Hilbert polynomial</Returns>
+ <Description>
+    Constructs a virtual Hilbert polynomial with underlying polynomial <A>polynomial</A>.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="root_sequence" Name="VirtualHilbertPolynomial" Label="for IsRootSequence"/>
+ <Returns>a virtual Hilbert polynomial</Returns>
+ <Description>
+    Constructs a virtual Hilbert polynomial corresponding to <A>root_sequence</A>.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="virtual_cohomology_table" Name="VirtualHilbertPolynomial" Label="for IsVirtualCohomologyTable"/>
+ <Returns>a virtual Hilbert polynomial</Returns>
+ <Description>
+    Constructs a virtual Hilbert polynomial associated to <A>virtual_cohomology_table</A>.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="homalg_map" Name="VectorSpaceWithIntegralStructure" Label="for IsHomalgMap"/>
+ <Returns>a vector space with integral structure</Returns>
+ <Description>
+    The input is a map <M>V \rightarrow W</M> of <M>\mathbb{Q}</M>-spaces. The basis of the pushed presentation
+    to W will be the lattice basis of the output.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="list_of_hilbert_polynomials, degree" Name="SubVectorSpaceOfHilbertPolynomials" Label="for IsList, IsInt"/>
+ <Returns>a vector space with integral structure</Returns>
+ <Description>
+    The first argument must be a list of univariate linearly independent polynomials over <M>\mathbb{Q}</M>.
+    The second argument is the maximal degree of the polynomials of the ambient space. This operation
+    constructs a vector space with integral structure generated by the polynomials in <A>list_of_hilbert_polynomials</A>
+    and embedded in the ambient space of polynomials of degree <A>degree</A>.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="IsVectorSpaceWithIntegralStructure, IsVectorSpaceWithIntegralStructure, IsHomalgMap" Name="MorphismOfVectorSpacesWithIntegralStructure" Label="for IsVectorSpaceWithIntegralStructure, IsVectorSpaceWithIntegralStructure, IsHomalgMap"/>
+ <Returns>a morphism of vector spaces</Returns>
+ <Description>
+    Constructor of a morphism of vector spaces with integral structure.
+    The first and the second argument are vector spaces with integral structure
+    representing the source and the target of the morphism. The third
+    argument represents the underlying morphism <M>\alpha</M> of vector spaces.
+    If <M>\alpha</M> is not integral written with respect to the lattice structure,
+    the constructor will give an error.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="IsVectorSpaceWithIntegralStructure, IsHomalgMap" Name="MorphismOfVectorSpacesWithIntegralStructure" Label="for IsVectorSpaceWithIntegralStructure, IsHomalgMap"/>
+ <Returns>a morphism of vector spaces with integral structure</Returns>
+ <Description>
+    Constructor of a morphism of a vector spaces with integral structure .
+    The first argument <M>V</M> is a vector space with integral structure, whose
+    underlying vector space must be identical to the range of the second
+    argument, which is a monomorphism <M>\alpha</M> of vector spaces. This operation
+    constructs a morphism of vector spaces with integral structure whose underlying morphism
+    equals <M>\alpha</M>. It is the maximal morphism with this property.
+ </Description>
+</ManSection>
+
+</Section>
+
+<Section Label="Chapter_BoijSoederberg_Section_Functors">
+<Heading>Functors</Heading>
+
+<ManSection>
+  <Oper Arg="arg" Name="VectorSpaceOfVirtualHilbertPolynomials" Label="for IsIntervalOfRootSequences"/>
+ <Description>
+    This functor maps a morphism of intervals of root sequences <M>I \rightarrow J</M> to the embedding of
+    vector space of Hilbert polynomials lying above the interval <M>I</M> into the vector space of Hilbert polynomials
+    lying above the interval <M>J</M>.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="arg" Name="VectorSpaceOfVirtualCohomologyTables" Label="for IsIntervalOfRootSequences"/>
+ <Description>
+    This functor maps a morphism of intervals of root sequences <M>I \rightarrow J</M> to the embedding of
+    vector space of cohomology tables lying above the interval <M>I</M> into the vector space of cohomology tables
+    lying above the interval <M>J</M>.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Arg="arg" Name="FullVectorSpaceOfVirtualHilbertPolynomials" Label="for IsInt"/>
+ <Description>
+    This primitive functor associates to a natural number <M>n</M> the vector space of Hilbert polynomials of degree <M>n</M>.
+ </Description>
+</ManSection>
+
+</Section>
+
+</Chapter>
+

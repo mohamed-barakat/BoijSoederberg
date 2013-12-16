@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<!DOCTYPE Book SYSTEM "gapdoc.dtd"
+[
+<!ENTITY Beispiel '<Package>Beispiel</Package>'>
+]
+>
+<Book Name="Beispiel">
+<TitlePage>
+<Title>Beispiel</Title>
+<Author>Sebastian Posur</Author>
+</TitlePage><Body>
+<#Include SYSTEM "AutoDocMainFile.xml">
+</Body>
+</Book>

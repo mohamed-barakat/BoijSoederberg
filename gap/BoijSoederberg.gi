@@ -473,8 +473,9 @@ InstallMethod( IsIntegral,
   function( virtual_cohomology_table )
     local interval_of_minimal_ambient_space, ambient_space, morphism, row,
     pair, homalg_map, list_of_coefficients;
-  
-    interval_of_minimal_ambient_space := IntervalOfMinimalAmbientSpace( virtual_cohomology_table );
+
+    #TODO: this has to become modular! Also use in IsZero!  
+    interval_of_minimal_ambient_space := IntervalSpannedByRepresentation( virtual_cohomology_table );
 
     ambient_space := VectorSpaceOfVirtualCohomologyTables( interval_of_minimal_ambient_space );
 
@@ -511,6 +512,35 @@ InstallMethod( IsIntegral,
     return not false in List( list_of_coefficients, IsInt  );
 
 end );
+
+##
+InstallMethod( IsZero,
+               "for a virtual cohomology table",
+               [ IsVirtualCohomologyTableRep ],
+
+  function( virtual_cohomology_table )
+    local linear_combination_of_root_sequences, elementary_interval_embedding, ambient_interval, embedding;
+
+    linear_combination_of_root_sequences := virtual_cohomology_table!.LinearCombinationOfRootSequences;
+
+    ambient_interval := IntervalSpannedByRepresentation( virtual_cohomology_table );
+    
+    elementary_interval_embedding := List( linear_combination_of_root_sequences,
+      l -> [ l[ 1 ], VectorSpaceOfVirtualCohomologyTables( MorphismOfIntervalsOfRootSequences( IntervalOfRootSequences( l[ 2 ] ), ambient_interval ) ) ]
+    );
+    
+    for embedding in elementary_interval_embedding do
+
+      SetPositionOfTheDefaultPresentation( UnderlyingVectorSpace( Source( embedding[ 2 ] ) ), PositionOfConcretePresentation( Source( embedding[ 2 ] ) ) );
+    
+    od;
+
+    embedding :=  Sum( List( elementary_interval_embedding, l -> MatrixOfMap( l[ 1 ] * UnderlyingMorphism( l[ 2 ] ) ) ) );
+      
+    return IsZero( embedding );
+  
+end );
+
 
 ##################################
 ##
@@ -705,7 +735,7 @@ InstallMethod( KernelEntries,
 end );
 
 ## IsVirtualCohomologyTable
-InstallMethod( IntervalOfMinimalAmbientSpace,
+InstallMethod( IntervalSpannedByRepresentation,
                "for a virtual cohomology table",
                [ IsVirtualCohomologyTableRep ],
 
@@ -751,6 +781,128 @@ InstallMethod( BettiTable,
 
     return betti_table;
 
+end );
+
+##TODO: Correct underlying set of root sequences here and in MinimalIntervalOfAmbientSpace
+##
+InstallMethod( RightBoundaryOfMinimalInterval,
+               "for a virtual cohomology table",
+               [ IsVirtualCohomologyTableRep ],
+
+  function( virtual_cohomology_table )
+    local interval, start_root_sequence, stop_root_sequence, length, right_boundary,
+          i, j;
+
+    if IsZero( virtual_cohomology_table ) then
+
+      return [ ];
+    
+    fi;
+          
+    interval := IntervalSpannedByRepresentation( virtual_cohomology_table );
+
+    start_root_sequence := RightBoundary( interval );
+
+    stop_root_sequence := LeftBoundary( interval );
+    
+    length := LengthOfRootSequences( UnderlyingPosetOfRootSequences( start_root_sequence ) );
+
+    right_boundary := [ ];
+
+    ##first entry
+    
+    i := length;
+
+    j := start_root_sequence[ i ];
+    
+    while virtual_cohomology_table[ [ i, j ] ] = 0 do
+
+      j := j - 1;
+    
+    od;
+
+    Add( right_boundary, j + 1 ); 
+    
+    for i in Reversed( [ 1 .. length - 1 ] ) do
+
+      for j in Reversed( [ stop_root_sequence[ i + 1 ] .. start_root_sequence[ i ] ] ) do
+
+        if virtual_cohomology_table[ [ i, j ] ] <> 0 then
+
+          Add( right_boundary, j + 1 );
+
+          break;
+
+        elif j = stop_root_sequence[ i + 1 ] then
+
+          Add( right_boundary, right_boundary[ length - i ] + 1 );
+        
+        fi;
+      
+      od;
+    
+    od;
+    
+    return RootSequence( right_boundary );
+  
+end );
+
+##
+InstallMethod( BoijSoederbergDecomposition,
+               "for a virtual cohomology table",
+               [ IsVirtualCohomologyTableRep ],
+
+  function( virtual_cohomology_table )
+    local smaller_table, underlying_poset_of_root_sequences, length, boij_soederberg_convex_combination,
+          apriori_boundary, counter, right_boundary, coefficient, supernatural_table, i;
+
+    smaller_table := virtual_cohomology_table;
+
+    length := LengthOfRootSequences( UnderlyingPosetOfRootSequences( virtual_cohomology_table ) );
+
+    boij_soederberg_convex_combination := [ ];
+
+    #this is an upper bound of the maximal number of elementary intervals needed 
+    apriori_boundary := Length( TopMaximalChain( IntervalSpannedByRepresentation( virtual_cohomology_table ) ) );
+
+    counter := 0;
+    
+    while not IsZero( smaller_table ) and counter < apriori_boundary do
+
+      right_boundary := RightBoundaryOfMinimalInterval( smaller_table );
+
+      supernatural_table := CohomologyTable( right_boundary );
+
+      coefficient := [ ];
+
+      for i in [ 1 .. length ] do
+
+        if supernatural_table[ [ i, right_boundary[ i ] - 1 ] ] <> 0 then
+
+          Add( coefficient, smaller_table[ [ i, right_boundary[ i ] - 1 ] ]/ supernatural_table[ [ i, right_boundary[ i ] - 1 ] ] );
+
+        fi;
+
+      od;
+
+      coefficient := Minimum( Filtered( coefficient, c -> c <> 0 ) );
+
+      Add( boij_soederberg_convex_combination, [ coefficient, right_boundary ] );
+
+      smaller_table := smaller_table + ( ( -1 ) * coefficient ) * supernatural_table;
+
+      counter := counter + 1;
+
+    od;
+
+    if not IsZero( smaller_table ) then
+
+      Error( "the given input does not lie in the Boij Söderberg cone\n" );
+
+    fi;
+    
+    return boij_soederberg_convex_combination;
+    
 end );
 
 ## IsVectorSpaceWithIntegralStructure
@@ -815,7 +967,7 @@ end );
 ##
 InstallMethod( TwistedChernPolynomial,
                "for a virtual Hilbert polynomial",
-               [ IsVirtualHilbertPolynomial ],
+               [ IsVirtualHilbertPolynomialRep ],
 
   function( virtual_hilbert_polynomial )
     local k0_element, chern_polynomial, chern_class_1, rank, twist;
@@ -837,6 +989,65 @@ InstallMethod( TwistedChernPolynomial,
     fi;
     
     return [ ChernPolynomial( ( - 1 )^( twist ) * VerticalShift( k0_element, twist ) ), twist ];
+  
+end );
+
+##
+InstallMethod( IntervalOfMinimalAmbientSpace,
+               "for a virtual Hilbert polynomial",
+               [ IsVirtualHilbertPolynomialRep ],
+
+  function( virtual_hilbert_polynomial )
+    local list_of_coefficients, degree, right_limit, left_limit, values_of_hilbert_polynomial, previous_value,
+          left_boundary, right_boundary, i, value;
+    
+    list_of_coefficients := virtual_hilbert_polynomial!.ListOfCoefficients;
+    
+    degree := Degree( virtual_hilbert_polynomial );
+    
+    list_of_coefficients := 1 / list_of_coefficients[ degree + 1 ] * list_of_coefficients;
+    
+    right_limit := ( - 1 ) * Sum( Filtered( list_of_coefficients{ [ 1 .. degree ] }, coefficient -> coefficient < 0 ) ) + 1;
+
+    list_of_coefficients := List( [ 1 .. degree ], i -> list_of_coefficients[ i ] * ( -1 )^( i - 1 + degree ) );
+    
+    left_limit := Sum( Filtered( list_of_coefficients, coefficient -> coefficient < 0 ) ) - 1;
+
+    previous_value := Value( virtual_hilbert_polynomial, left_limit );
+
+    left_boundary := [ ];
+
+    right_boundary := [ ];
+    
+    for i in [ left_limit + 1 .. right_limit ] do
+    
+      value := Value( virtual_hilbert_polynomial, i );
+
+      if previous_value * value < 0 then
+
+        Add( left_boundary, i - 1 );
+
+        Add( right_boundary, i );
+            
+      elif value = 0 then
+
+        Add( left_boundary, i );
+
+        Add( right_boundary, i );
+
+      fi;
+
+      if Length( left_boundary ) = degree then
+
+        break;
+
+      fi;
+
+      previous_value := value;
+
+    od;
+    
+    return IntervalOfRootSequences( RootSequence( left_boundary ), RootSequence( right_boundary ) );
   
 end );
 
@@ -885,7 +1096,7 @@ InstallMethod( Infimum,
   
     if false in List( list, l -> IsRootSequenceRep( l ) ) then
 
-      Error( "the list must contain only root sequences" );
+      Error( "the list must contain only root sequences\n" );
 
     fi;
 
@@ -939,7 +1150,7 @@ InstallMethod( Supremum,
 
     if false in List( list, l -> IsRootSequenceRep( l ) ) then
 
-      Error( "the list must contain only root sequences" );
+      Error( "the list must contain only root sequences\n" );
 
     fi;
 
@@ -1872,6 +2083,12 @@ InstallMethod( VirtualCohomologyTable,
                              UnderlyingPosetOfRootSequences, poset_of_root_sequences
                            );
 
+    if reduced_list = [ ] then
+
+      SetIsZero( virtual_cohomology_table, true );
+
+    fi;
+
     return virtual_cohomology_table;
     
 end );
@@ -1888,7 +2105,7 @@ InstallMethod( VirtualCohomologyTable,
 
     if Length( top_maximal_chain ) <> Length( list_of_coefficients ) then
 
-      Error( "the dimension does not match the number of elements of the first list" );
+      Error( "the dimension does not match the number of elements of the first list\n" );
     
     fi;
     
@@ -1909,7 +2126,7 @@ InstallMethod( VirtualHilbertPolynomial,
     
     if false in List( list_of_coefficients, IsRat ) then
 
-      Error( "the list must contain rational numbers" );
+      Error( "the list must contain rational numbers\n" );
     
     fi;
 
@@ -1954,13 +2171,24 @@ end );
 
 ##
 InstallMethod( VirtualHilbertPolynomial,
-               "for a virtual_cohomology_table",
+               "for a virtual cohomology table",
                [ IsVirtualCohomologyTableRep ],
 
   function( virtual_cohomology_table )
 
     return VirtualHilbertPolynomial( HilbertPolynomial( virtual_cohomology_table ) );
   
+end );
+
+##
+InstallMethod( VirtualHilbertPolynomial,
+               "for a Chern polynomial with rank",
+               [ IsChernPolynomialWithRankRep ],
+
+  function( chern_polynomial_with_rank )
+
+    return VirtualHilbertPolynomial( HilbertPolynomial( chern_polynomial_with_rank ) );
+               
 end );
                
 ##

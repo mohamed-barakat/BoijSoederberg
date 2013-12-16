@@ -45,7 +45,7 @@ PackageDoc := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">= 4.5",
+  GAP := ">= 4.6",
   NeededOtherPackages := [
                            [ "CombinatoricsForHomalg", ">=2013.09.21" ],
                            [ "GradedModules", ">=2012.03.09" ],
