@@ -277,7 +277,7 @@ InstallGlobalFunction( _Functor_VectorSpaceOfVirtualCohomologyTables_OnElementar
     fi;
 
     virtual_cohomology_table :=
-      CohomologyTable( root_sequence ) + ( - 1 ) *
+      CohomologyTable( root_sequence ) -
       VirtualCohomologyTable(
         List( [ 1 .. Length( coefficients ) ], i -> [ coefficients[ i ], TopMaximalHilbertChain( interval_of_root_sequences )[ i ] ] )
       );
@@ -436,6 +436,7 @@ end );
 ##
 ##################################
 
+## IsVirtualHilbertPolynomial
 ##
 InstallMethod( IsIntegral,
                "for a virtual Hilbert polynomial",
@@ -465,6 +466,18 @@ InstallMethod( IsIntegral,
       
 end );
 
+##
+InstallMethod( IsZero,
+               "for a virtual Hilbert polynomial",
+               [ IsVirtualHilbertPolynomialRep ],
+
+  function( virtual_hilbert_polynomial )
+
+    return IsZero( UnderlyingPolynomial( virtual_hilbert_polynomial ) );
+  
+end );
+
+## IsVirtualCohomologyTable
 ##
 InstallMethod( IsIntegral,
                "for a virtual cohomology table",
@@ -889,7 +902,7 @@ InstallMethod( BoijSoederbergDecomposition,
 
       Add( boij_soederberg_convex_combination, [ coefficient, right_boundary ] );
 
-      smaller_table := smaller_table + ( ( -1 ) * coefficient ) * supernatural_table;
+      smaller_table := smaller_table - coefficient * supernatural_table;
 
       counter := counter + 1;
 
@@ -903,6 +916,17 @@ InstallMethod( BoijSoederbergDecomposition,
     
     return boij_soederberg_convex_combination;
     
+end );
+
+##
+InstallMethod( AdditiveInverse,
+               "for a virtual cohomology table",
+               [ IsVirtualCohomologyTableRep ],
+
+  function( virtual_cohomology_table )
+
+    return ( -1 ) * virtual_cohomology_table;
+  
 end );
 
 ## IsVectorSpaceWithIntegralStructure
@@ -1049,6 +1073,17 @@ InstallMethod( IntervalOfMinimalAmbientSpace,
     
     return IntervalOfRootSequences( RootSequence( left_boundary ), RootSequence( right_boundary ) );
   
+end );
+
+##
+InstallMethod( AdditiveInverse,
+               "for a virtual Hilbert polynomial",
+               [ IsVirtualHilbertPolynomialRep ],
+
+  function( virtual_hilbert_polynomial )
+
+    return ( -1 ) * virtual_hilbert_polynomial;
+
 end );
 
 ##################################
@@ -1211,6 +1246,17 @@ InstallMethod( \*,
 end );
 
 ## TODO
+##
+InstallMethod( RowOfCoefficients,
+               "for a polynomial and an integer",
+               [ IsLaurentPolynomial, IsNegInfinity ],
+
+  function( polynomial, neg_infinity )
+
+    return [ ];
+  
+end );
+
 ##
 InstallMethod( RowOfCoefficients,
                "for a polynomial and an integer",
@@ -2134,7 +2180,7 @@ InstallMethod( VirtualHilbertPolynomial,
 
     degree := Length( list_of_coefficients ) - 1;
 
-    underlying_polynomial := Sum( List( [ 0 .. degree ], i -> list_of_coefficients[ i + 1 ] * t^i ) );
+    underlying_polynomial := 0 * t + Sum( List( [ 0 .. degree ], i -> list_of_coefficients[ i + 1 ] * t^i ) );
   
     virtual_hilbert_polynomial := rec( ListOfCoefficients := list_of_coefficients );
 
@@ -2151,9 +2197,10 @@ end );
 InstallMethod( VirtualHilbertPolynomial,
                "for a polynomial",
                [ IsLaurentPolynomial ],
+#                [ IsPolynomialDefaultRep ],
 
   function( polynomial )
-  
+    
     return VirtualHilbertPolynomial( RowOfCoefficients( polynomial, Degree( polynomial ) ) );
   
 end );

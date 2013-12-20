@@ -6,6 +6,8 @@ papers
 change.log
 public_html.version
 
+*.swp
+
 examples/c1_0_c2_3/*.pdf                                                                                                                                             
 examples/c1_0_c2_3/*.html
 examples/c1_0_c2_3/*.txt

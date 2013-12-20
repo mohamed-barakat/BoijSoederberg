@@ -32,9 +32,9 @@ DeclareCategory( "IsIntervalOfRootSequences", IsObject );
 
 DeclareCategory( "IsMorphismOfIntervalsOfRootSequences", IsObject );
 
-DeclareCategory( "IsVirtualCohomologyTable", IsObject );
+DeclareCategory( "IsVirtualCohomologyTable", IsAdditiveElementWithInverse );
 
-DeclareCategory( "IsVirtualHilbertPolynomial", IsObject );
+DeclareCategory( "IsVirtualHilbertPolynomial", IsAdditiveElementWithInverse );
 
 DeclareCategory( "IsVectorSpaceWithIntegralStructure", IsObject );
 
@@ -70,13 +70,6 @@ DeclareProperty( "IsIntegral",
 #! @Arguments virtual_cohomology_table
 DeclareProperty( "IsIntegral",
                  IsVirtualCohomologyTable );
-
-## IsVirtualCohomologyTable
-#! @Description Returns true if every entry of the given virtual cohomology table is zero.
-#! @Arguments virtual_cohomology_table
-DeclareProperty( "IsZero",
-                 IsVirtualCohomologyTable );
-                 
 
 #################################
 ##
@@ -328,14 +321,8 @@ DeclareOperation( "Value",
 DeclareOperation( "\*",
                   [ IsVirtualHilbertPolynomial, IsRat ] );
                   
-
 DeclareOperation( "\*",
                   [ IsRat, IsVirtualHilbertPolynomial ] );
-
-
-DeclareOperation( "\+",
-                  [ IsVirtualHilbertPolynomial, IsVirtualHilbertPolynomial ] );
-                  
 
 DeclareOperation( "\<",
                   [ IsRootSequence, IsRootSequence ] );
@@ -366,14 +353,11 @@ DeclareOperation( "Supremum",
 DeclareOperation( "Supremum",
                   [ IsList ] );
 
-
 DeclareOperation( "\<",
                   [ IsIntervalOfRootSequences, IsIntervalOfRootSequences ] );
 
-
 DeclareOperation( "\[\]",
                   [ IsRootSequence, IsInt ] );
-
 
 DeclareOperation( "\[\]",
                   [ IsRootSequence, IsList ] );
@@ -384,26 +368,23 @@ DeclareOperation( "\[\]",
 DeclareOperation( "\*",
                   [ IsVirtualCohomologyTable, IsRat ] );
 
-
 DeclareOperation( "\*",
-                  [ IsRat, IsVirtualCohomologyTable ] );
-
-
-DeclareOperation( "\+",
-                  [ IsVirtualCohomologyTable, IsVirtualCohomologyTable ] );
-
+                  [ IsRat, IsVirtualCohomologyTable ] );          
+                  
 #! @Description The input is a list of root sequences. The operation returns the list of coefficients of the given polynomial up to degree <A>degree</A>.
 #! @Returns a list
 #! @Arguments polynomial, degree
 DeclareOperation( "RowOfCoefficients",
                   [ IsLaurentPolynomial, IsInt ] );
 
+DeclareOperation( "RowOfCoefficients",
+                  [ IsLaurentPolynomial, IsNegInfinity ] );
+
 #! @Description Sets the display interval of virtual cohomology tables. Every list of integers is accepted as an input.
 #! @Returns nothing
 #! @Arguments list_of_integers
 DeclareOperation( "SetDisplayInterval",
                   [ IsList ] );
-
 
 DeclareOperation( "AllHilbertPolynomials",
                   [ IsIntervalOfRootSequences, IsInt ] );
@@ -500,6 +481,7 @@ DeclareOperation( "VirtualHilbertPolynomial",
 #! @Arguments polynomial
 DeclareOperation( "VirtualHilbertPolynomial",
                   [ IsLaurentPolynomial ] );
+#                   [ IsPolynomialFunction ] );
 
 #! @Description Constructs a virtual Hilbert polynomial corresponding to <A>root_sequence</A>.
 #! @Returns a virtual Hilbert polynomial
