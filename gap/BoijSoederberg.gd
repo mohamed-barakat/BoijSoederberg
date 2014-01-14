@@ -108,6 +108,9 @@ DeclareAttribute( "HilbertPolynomial",
 #! @Arguments root_sequence
 DeclareAttribute( "CohomologyTable",
                   IsRootSequence );
+
+DeclareAttribute( "Dual",
+                  IsRootSequence );
                   
 ## IsIntervalOfRootSequences
 #! @Description Returns the category of intervals of root sequences.
@@ -216,6 +219,12 @@ DeclareAttribute( "RightBoundaryOfMinimalInterval",
 DeclareAttribute( "BoijSoederbergDecomposition",
                   IsVirtualCohomologyTable );
 
+DeclareAttribute( "Dual",
+                  IsVirtualCohomologyTable );
+
+DeclareAttribute( "Dimension",
+                  IsVirtualCohomologyTable );
+
 #NOT CORRECT
 #! @Description Computes the interval of the minimal ambient space of the given virtual Hilbert polynomial
 #! @Returns an interval of root sequences
@@ -247,6 +256,19 @@ DeclareAttribute( "K0ElementOfStableModuleCategory",
 #! @Returns A list with an integer and a chern polynomial with rank
 #! @Arguments virtual_hilbert_polynomial                  
 DeclareAttribute( "TwistedChernPolynomial",
+                  IsVirtualHilbertPolynomial );
+
+#! @Description Computes the Chern polynomial with rank corresponding to the given Hilbert polynomial
+#! @Returns a chern polynomial with rank
+#! @Arguments virtual_hilbert_polynomial      
+DeclareAttribute( "ChernPolynomial",
+                  IsVirtualHilbertPolynomial );
+
+##TODO: Clean this Attribute                  
+DeclareAttribute( "Dimension",
+                  IsVirtualHilbertPolynomial );
+                  
+DeclareAttribute( "Dual",
                   IsVirtualHilbertPolynomial );
 
 ## IsVectorSpaceWithIntegralStructure
@@ -303,7 +325,7 @@ DeclareAttribute( "Source",
 #! @Arguments morphism_of_vector_spaces_with_integral_structure                    
 DeclareAttribute( "Range",
                   IsMorphismOfVectorSpacesWithIntegralStructure );
-
+                  
 #################################
 ##
 ## Operations
@@ -405,6 +427,46 @@ DeclareOperation( "AllHilbertPolynomials",
 DeclareOperation( "AllCohomologyTables",
                   [ IsIntervalOfRootSequences, IsVirtualHilbertPolynomial ] );
 
+
+#! @Description Input: <M>(a, i) \in \mathbb{N}^2</M>. Computes the i-th Macaulay expansion of a.
+#! The output is a list containing pairs <M>[a_j, j]</M> such that <M>i \geq j \geq 1</M> and
+#! a is the sum of the binomial coefficients a_j choose j.
+#! @Returns a list
+#! @Arguments a, i
+DeclareOperation( "MacaulayExpansion",
+                  [ IsInt, IsInt ] );
+
+#! @Description Input: <M>(a, i) \in \mathbb{N}^2</M>. Let <M>[a_j, j]</M> be the i-th i-th Macaulay expansion of a.
+#! The output is the sum of the binomial coefficients a_j choose j + 1.
+#! @Returns an integer
+#! @Arguments a, i                  
+DeclareOperation( "KruskalKatonaFunction",
+                  [ IsInt, IsInt ] );
+
+DeclareOperation( "HilbertSeriesOfExteriorAlgebra",
+                  [ IsInt ] );
+
+DeclareOperation( "AllHilbertSeriesOfIdealsOfTheExteriorAlgebra",
+                  [ IsInt ] );
+
+DeclareOperation( "IsHilbertSeriesOfSubmoduleOfAFreeModuleOverTheExteriorAlgebra",
+                  [ IsElementOfGradedRelativeRingRep, IsList ] );
+
+DeclareOperation( "Twist",
+                  [ IsRootSequence, IsInt ] );
+
+DeclareOperation( "Twist",
+                  [ IsVirtualCohomologyTable, IsInt ] );
+
+DeclareOperation( "Twist",
+                  [ IsVirtualHilbertPolynomial, IsInt ] );
+
+DeclareOperation( "Twist",
+                  [ IsChernPolynomialWithRank, IsInt ] );
+
+DeclareOperation( "K0ElementLift",
+                  [ IsVirtualCohomologyTable, IsInt ] );
+                  
 #################################
 ##
 ## Constructors

@@ -134,8 +134,7 @@ BOIJ_SOEDERBERG.CategoryOfVectorSpacesOfVirtualCohomologyTables :=
           MorphismConstructor := ReturnTrue,
           containers := rec( ),
           QQ := BOIJ_SOEDERBERG.CategoryOfVectorSpacesOfVirtualHilbertPolynomials!.QQ,
-          display_interval := [ -5 .. 5 ]
-       )
+          display_interval := [ -5 .. 5 ]       )
        
 );
 
@@ -597,6 +596,30 @@ InstallMethod( CohomologyTable,
   
 end );
 
+##
+InstallMethod( Dual,
+               "for a root sequence",
+               [ IsRootSequenceRep ],
+
+  function( root_sequence )
+    local dual_integer_sequence, underlying_poset_of_root_sequences, length_of_root_sequences, dual_root_sequence;
+    
+    dual_integer_sequence := ( -1 ) * root_sequence!.StrictlyDecreasingIntegerSequence;
+
+    underlying_poset_of_root_sequences := UnderlyingPosetOfRootSequences( root_sequence );
+
+    length_of_root_sequences := LengthOfRootSequences( underlying_poset_of_root_sequences );
+    
+    dual_integer_sequence := List( dual_integer_sequence, i -> i - ( length_of_root_sequences + 1 ) );
+
+    dual_root_sequence := RootSequence( dual_integer_sequence, underlying_poset_of_root_sequences );
+
+    SetDual( dual_root_sequence, root_sequence );
+    
+    return dual_root_sequence;
+               
+end );
+
 ## IsIntervalOfRootSequences
 ##
 InstallMethod( UnderlyingSet,
@@ -748,6 +771,16 @@ InstallMethod( KernelEntries,
 end );
 
 ## IsVirtualCohomologyTable
+InstallMethod( Dimension,
+               "for a virtual cohomology table",
+               [ IsVirtualCohomologyTableRep ],
+
+  function( virtual_cohomology_table )
+
+    return LengthOfRootSequences( virtual_cohomology_table!.UnderlyingPosetOfRootSequences );
+  
+end );
+
 InstallMethod( IntervalSpannedByRepresentation,
                "for a virtual cohomology table",
                [ IsVirtualCohomologyTableRep ],
@@ -871,6 +904,7 @@ InstallMethod( BoijSoederbergDecomposition,
 
     smaller_table := virtual_cohomology_table;
 
+    #TODO: Length as an Attribute of Virtual Cohomology Tables
     length := LengthOfRootSequences( UnderlyingPosetOfRootSequences( virtual_cohomology_table ) );
 
     boij_soederberg_convex_combination := [ ];
@@ -879,7 +913,8 @@ InstallMethod( BoijSoederbergDecomposition,
     apriori_boundary := Length( TopMaximalChain( IntervalSpannedByRepresentation( virtual_cohomology_table ) ) );
 
     counter := 0;
-    
+
+    #TODO: try to avoid IsZero (also in RightBoundaryOfMinimalInterval)
     while not IsZero( smaller_table ) and counter < apriori_boundary do
 
       right_boundary := RightBoundaryOfMinimalInterval( smaller_table );
@@ -929,6 +964,25 @@ InstallMethod( AdditiveInverse,
   
 end );
 
+##
+InstallMethod( Dual,
+               "for a virtual_cohomology_table",
+               [ IsVirtualCohomologyTable ],
+
+  function ( virtual_cohomology_table )
+    local dual_linear_combination_of_root_sequences, dual_virtual_cohomology_table;
+
+    dual_linear_combination_of_root_sequences :=
+      List( virtual_cohomology_table!.LinearCombinationOfRootSequences, pair -> [ pair[ 1 ], Dual( pair[ 2 ] ) ] );
+
+    dual_virtual_cohomology_table := VirtualCohomologyTable( dual_linear_combination_of_root_sequences );
+
+    SetDual( dual_virtual_cohomology_table, virtual_cohomology_table );
+      
+    return dual_virtual_cohomology_table;
+  
+end );
+
 ## IsVectorSpaceWithIntegralStructure
 ##
 InstallMethod( Dimension,
@@ -964,6 +1018,17 @@ InstallMethod( EmbeddingIntoSuperVectorSpace,
 
     return homalg_map;
   
+end );
+
+##
+InstallMethod( Dimension,
+               "for a virtual Hilbert polynomial",
+               [ IsVirtualHilbertPolynomial ],
+
+  function( virtual_hilbert_polynomial )
+
+    return Length( virtual_hilbert_polynomial!.ListOfCoefficients ) - 1;
+
 end );
 
 ##
@@ -1013,6 +1078,20 @@ InstallMethod( TwistedChernPolynomial,
     fi;
     
     return [ ChernPolynomial( ( - 1 )^( twist ) * VerticalShift( k0_element, twist ) ), twist ];
+  
+end );
+
+##
+InstallMethod( ChernPolynomial,
+               "for a virtual Hilbert polynomial",
+               [ IsVirtualHilbertPolynomialRep ],
+
+  function( virtual_hilbert_polynomial )
+    local k0_element;
+  
+    k0_element := K0ElementOfStableModuleCategory( virtual_hilbert_polynomial );
+
+    return ChernPolynomial( k0_element );
   
 end );
 
@@ -1083,6 +1162,27 @@ InstallMethod( AdditiveInverse,
   function( virtual_hilbert_polynomial )
 
     return ( -1 ) * virtual_hilbert_polynomial;
+
+end );
+
+##
+InstallMethod( Dual,
+               "for a virtual Hilbert polynomial",
+               [ IsVirtualHilbertPolynomial ],
+
+  function( virtual_hilbert_polynomial )
+    local dimension, t, dual_virtual_hilbert_polynomial;
+
+    dimension := Dimension( virtual_hilbert_polynomial );
+
+    t := VariableForHilbertPolynomial( );
+     
+    dual_virtual_hilbert_polynomial :=
+      VirtualHilbertPolynomial( ( ( -1 ) ^ dimension ) * Value( virtual_hilbert_polynomial!.UnderlyingPolynomial, -t - ( dimension + 1 ) ) );
+
+    SetDual( dual_virtual_hilbert_polynomial, virtual_hilbert_polynomial );
+
+    return dual_virtual_hilbert_polynomial;
 
 end );
 
@@ -1911,6 +2011,316 @@ InstallMethod( AllHilbertPolynomials,
 
     return AllHilbertPolynomials( interval_of_root_sequences, rank, true );
 
+end );
+
+##
+InstallMethod( MacaulayExpansion,
+               "for a pair of positive integers",
+               [ IsInt, IsInt ],
+
+  function( a, i )
+    local macaulay_expansion, rest, j, coefficient;
+  
+    if not( a > 0 and i > 0 ) then
+
+      Error( "arguments must be positive integers\n" );
+
+    fi;
+
+    macaulay_expansion := [ ];
+
+    rest := a;
+
+    j := i;
+
+    while rest > 0 do
+
+      coefficient := 0;
+
+      while rest >= Binomial( coefficient, j ) do
+
+        coefficient := coefficient + 1;
+      
+      od;
+
+      Add( macaulay_expansion, [ coefficient - 1, j ] );
+
+      rest := rest - Binomial( coefficient - 1, j );
+
+      j := j - 1;
+
+    od;
+
+    return macaulay_expansion;
+  
+end );
+
+##
+InstallMethod( KruskalKatonaFunction,
+               "for a pair of positive integers",
+               [ IsInt, IsInt ],
+
+  function( a, i )
+    local macaulay_expansion;
+
+    if a = 0 and i > 0 then
+
+      return 0;
+
+    fi;
+    
+    macaulay_expansion := MacaulayExpansion( a, i );
+
+    return Sum( List( macaulay_expansion, l -> Binomial( l[ 1 ], l[ 2 ] + 1 ) ) );
+  
+end );
+
+##
+InstallMethod( HilbertSeriesOfExteriorAlgebra,
+               "for an integer",
+                  [ IsInt ],
+
+  function( dimension )
+    
+    return ElementOfGradedRelativeRing( List( [ 0 .. dimension + 1 ], i -> [ Binomial( dimension + 1, i ), -i ] ), dimension + 1 );
+  
+end );
+
+##
+InstallMethod( AllHilbertSeriesOfIdealsOfTheExteriorAlgebra,
+               "for an integer",
+               [ IsInt ],
+
+  function( dimension )
+    local list_of_hilbert_series, degree, coefficient_list, new_list, hilbert_series_of_exterior_algebra;
+
+    list_of_hilbert_series := List( [ 0 .. dimension + 1 ], i -> [ i ] );
+  
+    for degree in [ 1 .. dimension ] do
+
+      new_list := [ ];
+      
+      for coefficient_list in list_of_hilbert_series do
+      
+        Append( new_list, List( [ 0 .. KruskalKatonaFunction( coefficient_list[ degree ], degree ) ], i -> Concatenation( coefficient_list, [ i ] ) ) );
+        
+      od;
+
+      list_of_hilbert_series := ShallowCopy( new_list );
+      
+    od;
+    
+    list_of_hilbert_series :=
+      List( list_of_hilbert_series, coefficient_list -> ElementOfGradedRelativeRing(
+            Concatenation( [ [ 1, 0 ] ], List( [ 1 .. dimension + 1 ], j -> [ coefficient_list[ j ], -j ] ) ), dimension + 1
+            )
+          );
+
+    hilbert_series_of_exterior_algebra := HilbertSeriesOfExteriorAlgebra( dimension );
+
+    list_of_hilbert_series := List( list_of_hilbert_series, hilbert_series -> hilbert_series_of_exterior_algebra - hilbert_series );
+
+    list_of_hilbert_series := Concatenation( [ hilbert_series_of_exterior_algebra ], list_of_hilbert_series );
+    
+    return list_of_hilbert_series;
+  
+end );
+
+##TODO
+##
+InstallMethod( IsHilbertSeriesOfSubmoduleOfAFreeModuleOverTheExteriorAlgebra,
+               "for an element of a graded relative ring and a list",
+               [ IsElementOfGradedRelativeRingRep, IsList ],
+
+  function( hilbert_series, list )
+
+    
+  
+end );
+
+##
+InstallMethod( Twist,
+               "for a root sequence and an integer",
+               [ IsRootSequenceRep, IsInt ],
+
+  function( root_sequence, twist )
+    local twisted_integer_sequence;
+
+    twisted_integer_sequence := List( root_sequence!.StrictlyDecreasingIntegerSequence, root -> root - twist );
+
+    return RootSequence( twisted_integer_sequence, root_sequence!.UnderlyingPosetOfRootSequences );
+  
+end );
+
+##
+InstallMethod( Twist,
+               "for a virtual cohomology table and an integer",
+               [ IsVirtualCohomologyTableRep, IsInt ],
+
+  function( virtual_cohomology_table, twist )
+    local twisted_linear_combination_of_root_sequences;
+
+    twisted_linear_combination_of_root_sequences :=
+      List( virtual_cohomology_table!.LinearCombinationOfRootSequences, pair -> [ pair[ 1 ], Twist( pair[ 2 ], twist ) ] );
+
+    return VirtualCohomologyTable( twisted_linear_combination_of_root_sequences );
+  
+end );
+
+##
+InstallMethod( Twist,
+               "for a virtual Hilbert polynomial and an integer",
+               [ IsVirtualHilbertPolynomialRep, IsInt ],
+
+  function( virtual_hilbert_polynomial, twist )
+    local t, twisted_underlying_polynomial;
+    
+    t := VariableForHilbertPolynomial( );
+
+    twisted_underlying_polynomial := Value( virtual_hilbert_polynomial!.UnderlyingPolynomial, t + twist );
+
+    return VirtualHilbertPolynomial( twisted_underlying_polynomial );
+  
+end );
+
+##
+InstallMethod( Twist,
+               "for a Chern polynomial with rank",
+               [ IsChernPolynomialWithRankRep, IsInt ],
+
+  function( chern_polynomial_with_rank, twist )
+    local virtual_hilbert_polynomial;
+
+    virtual_hilbert_polynomial := VirtualHilbertPolynomial( chern_polynomial_with_rank );
+
+    return ChernPolynomial( Twist( virtual_hilbert_polynomial, twist ) );
+    
+end );           
+
+##
+InstallMethod( K0ElementLift,
+                  "for a virtual cohomology table and an integer",
+                  [ IsVirtualCohomologyTable, IsInt ],
+
+  function( virtual_cohomology_table, cohomological_degree )
+    local k0_element, dimension, hilbert_series_of_exterior_algebra,
+          diagonal_entries, diagonal_entries_pre, upper_bound, highest_generator, lowest_socle, lower_bound, k0_list_of_coefficients, coefficient, k0_upper_bound, k0_lower_bound,
+          further_modifications, is_valid;
+
+    #the shift is necessary because: K_0( F( d ) ) = (-1)^d * K_0( F )
+    k0_element := K0ElementOfStableModuleCategory( VirtualHilbertPolynomial( virtual_cohomology_table ) ) * ( -1 )^cohomological_degree;
+
+    #1.Step: adjust the borders
+          
+    dimension := Dimension( virtual_cohomology_table );
+    
+    hilbert_series_of_exterior_algebra := HilbertSeriesOfExteriorAlgebra( dimension );
+    
+    diagonal_entries := List( [ 0 .. dimension ], i -> [ cohomological_degree - i, virtual_cohomology_table[ [ i, cohomological_degree - i ] ] ] );
+
+    diagonal_entries_pre := List( [ 0 .. dimension ], i -> [ cohomological_degree - i - 1 + ( dimension + 1 ), virtual_cohomology_table[ [ i, cohomological_degree - 1 - i ] ] ] );
+    
+    #-1 because the resolution is minimal
+    highest_generator := First( diagonal_entries_pre, entry -> entry[ 2 ] <> 0 );
+
+    upper_bound := highest_generator[ 1 ];
+
+    lowest_socle := First( Reversed( diagonal_entries ), entry -> entry[ 2 ] <> 0 );
+    
+    lower_bound := lowest_socle[ 1 ];
+
+    k0_list_of_coefficients := EvalRingElement( HomogeneousParts( k0_element ) );
+
+    coefficient := k0_list_of_coefficients[ Length( k0_list_of_coefficients ) ];
+    
+    k0_upper_bound := coefficient[ 2 ];
+
+    while k0_upper_bound > upper_bound do
+
+      k0_element := k0_element - coefficient[ 1 ] * VerticalShift( hilbert_series_of_exterior_algebra, coefficient[ 2 ] );
+
+      k0_list_of_coefficients := EvalRingElement( HomogeneousParts( k0_element ) );
+
+      coefficient := k0_list_of_coefficients[ Length( k0_list_of_coefficients ) ];
+
+      k0_upper_bound := coefficient[ 2 ];
+    
+    od;
+
+    coefficient :=  k0_list_of_coefficients[ 1 ];
+
+    k0_lower_bound := coefficient[ 2 ];
+
+    while k0_lower_bound < lower_bound do
+
+      k0_element := k0_element - coefficient[ 1 ] * VerticalShift( hilbert_series_of_exterior_algebra, coefficient[ 2 ] + ( dimension + 1 ) );
+
+      k0_list_of_coefficients := EvalRingElement( HomogeneousParts( k0_element ) );
+
+      coefficient := k0_list_of_coefficients[ 1 ];
+
+      k0_lower_bound := coefficient[ 2 ];
+
+    od;
+    
+    #2.Step: adjust the socle
+
+    k0_list_of_coefficients := EvalRingElement( HomogeneousParts( k0_element ) );
+
+    coefficient := Filtered( k0_list_of_coefficients, pair -> pair[ 2 ] = lowest_socle[ 1 ] );
+    
+    if coefficient = [ ] then
+
+      coefficient := 0;
+
+    else
+
+      coefficient := coefficient[ 1 ][ 1 ];
+
+    fi;
+    
+    k0_element := k0_element + ( lowest_socle[ 2 ] - coefficient ) * VerticalShift( hilbert_series_of_exterior_algebra, lowest_socle[ 1 ] + ( dimension + 1 ) );
+    
+    #3.Step: adjust the generators
+
+    k0_list_of_coefficients := EvalRingElement( HomogeneousParts( k0_element ) );
+
+    coefficient := Filtered( k0_list_of_coefficients, pair -> pair[ 2 ] = highest_generator[ 1 ] );
+    
+    if coefficient = [ ] then
+
+      coefficient := 0;
+
+    else
+
+      coefficient := coefficient[ 1 ][ 1 ];
+
+    fi;
+
+    k0_element := k0_element + ( highest_generator[ 2 ] - coefficient ) * VerticalShift( hilbert_series_of_exterior_algebra, highest_generator[ 1 ] );
+
+    #4.Step: Check if more modifications could be done
+
+    if ( upper_bound - lower_bound ) - 2 >= dimension + 1 then
+
+      further_modifications := true;
+
+    else
+
+      further_modifications := false;
+
+    fi;
+
+    #5.Step: Check if the lift is valid
+
+    #is every entry nonnegative?
+
+    
+    
+    #is the lowest socle still correct?
+    
+    return [ lower_bound, upper_bound , k0_element, further_modifications ];
+                  
 end );
 
 ##################################

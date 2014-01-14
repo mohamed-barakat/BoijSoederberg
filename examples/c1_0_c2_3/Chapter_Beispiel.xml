@@ -41,9 +41,38 @@ gap> BoijSoederbergDecomposition( a );
 [ [ 1/9, [ 2, -1, -3, -6 ] ], [ 22/27, [ 2, -1, -3, -7 ] ], [ 4/27, [ 2, -1, -4, -7 ] ], [ 22/27, [ 2, -2, -4, -7 ] ], [ 1/9, [ 1, -2, -4, -7 ] ] ]
 ]]></Example>
 
- Angenommen diese Tabelle käme tatsächlich von einem Vektorbündel <M>\mathscr{F}</M>,
- so wäre das 0-te Syzygienobjekt der korrespondieren Tateauflösung
- ein Unterobjekt von <M>\omega_{E} \otimes_{k} H^{1}(\mathscr{F}(-1)) \oplus H^{2} \otimes_{k} (\mathscr{F}(-2))</M>.
+ Angenommen diese Tabelle käme tatsächlich von einem Vektorbündel <M>F</M>,
+ so wäre das 0-te Syzygienobjekt <M>S</M> der korrespondieren Tateauflösung
+ ein Unterobjekt von <M>\omega_{E} \otimes_{k} (H^{1}_{-1}(F) \oplus H^{2}_{-2}(F) )</M>
+ und ein Faktorobjekt von <M>\omega_{E} \otimes_{k} (H^{3}_{-4}(F) \oplus H^{2}_{-3}(F) )</M>, d.h.
+ erzeugt in den Graden -4 + 5 = 1 und -3 + 5 = 2. Wir suchen nun einen Vertreter der <M>K_0</M> Klasse von <M>S</M>,
+ welcher mit der Beschreibung von <M>S</M> als Syzygienobjekt kompatibel ist:
+
+
+<Example><![CDATA[
+gap> k := K0ElementOfStableModuleCategory( p );
+-6-23*x-24*x^2-11*x^3-2*x^4 -> P^4
+]]></Example>
+
+ Wir müssen die Koeffizienten von <M>x^4</M> und <M>x^3</M> zu 0 setzen:
+
+
+<Example><![CDATA[
+gap> pr := ElementOfGradedRelativeRing( List( [ 0 .. 5 ], i -> [ Binomial( 5, i ), i ] ), 5 );
+1+5*x+10*x^2+10*x^3+5*x^4+x^5 -> P^4
+gap> mx := ElementOfGradedRelativeRing( [ [ 1, - 1 ] ], 5 );
+x^-1 -> P^4
+gap> k + 2 * mx * p;
+2*x^-1+4-3*x-4*x^2-x^3 -> P^4
+gap> k + 2 * mx * p + mx^2 * p;
+x^-2+7*x^-1+14+7*x+x^2 -> P^4
+]]></Example>
+
+ Hierbei muss es sich um die Hilbertreihe von <M>S</M> handeln, da jeder weitere Vertreter
+ mit Koeffizienten <M>a_i = 0</M> für <M>i > 2</M> und <M>a_2 = 1</M> zwangsläufig einen nicht triviale Koeffizienten
+ <M>a_{-3}</M> hätte, im Widerspruch zur oben beschriebenen Einbettung von <M>S</M>.
+ Es stellt sich als die Frage, ob ein <M>E</M>-Modul mit diesen Eigenschaften existiert:
+ 
 
 
 </Section>
