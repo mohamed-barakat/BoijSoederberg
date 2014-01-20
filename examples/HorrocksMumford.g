@@ -18,5 +18,11 @@ Display( T );
 
 I := IntervalOfRootSequences( R5, R1 );
 
-A := AllCohomologyTables( I, VirtualHilbertPolynomial( T ) )[ 1 ];
+f := function( i, j ) return T[ [ i, 2 * j ] ]; end;
+
+M := TopMaximalChain( IntervalOfRootSequences( RootSequence( [ 2, 0, -1, -3 ] ), RootSequence( [ 3, 1, 0, -2 ] )  ) );
+
+M2 := TopMaximalChain( IntervalOfRootSequences( RootSequence( [ -4, -5, -6, -9 ] ), RootSequence( [ 9, 8, 7, 5 ] )  ) );
+
+# A := AllCohomologyTables( I, VirtualHilbertPolynomial( T ) )[ 1 ];
 

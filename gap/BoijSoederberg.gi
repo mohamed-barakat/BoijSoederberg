@@ -771,6 +771,7 @@ InstallMethod( KernelEntries,
 end );
 
 ## IsVirtualCohomologyTable
+##
 InstallMethod( Dimension,
                "for a virtual cohomology table",
                [ IsVirtualCohomologyTableRep ],
@@ -781,6 +782,18 @@ InstallMethod( Dimension,
   
 end );
 
+##
+InstallMethod( Zero,
+               "for a virtual cohomology table",
+               [ IsVirtualCohomologyTableRep ],
+
+  function( virtual_cohomology_table )
+
+    return ZeroVirtualCohomologyTable( Dimension( virtual_cohomology_table ) );
+  
+end );
+
+##
 InstallMethod( IntervalSpannedByRepresentation,
                "for a virtual cohomology table",
                [ IsVirtualCohomologyTableRep ],
@@ -830,7 +843,7 @@ InstallMethod( BettiTable,
 end );
 
 ##TODO: Correct underlying set of root sequences here and in MinimalIntervalOfAmbientSpace
-##
+##BUG: Start with the smallest value first!!
 InstallMethod( RightBoundaryOfMinimalInterval,
                "for a virtual cohomology table",
                [ IsVirtualCohomologyTableRep ],
@@ -871,15 +884,17 @@ InstallMethod( RightBoundaryOfMinimalInterval,
     
     for i in Reversed( [ 1 .. length - 1 ] ) do
 
-      for j in Reversed( [ stop_root_sequence[ i + 1 ] .. start_root_sequence[ i ] ] ) do
-
+#       for j in Reversed( [ stop_root_sequence[ i + 1 ] .. start_root_sequence[ i ] ] ) do
+      for j in Reversed( [ Maximum( right_boundary ) + 1 .. start_root_sequence[ i ] ] ) do
+      
         if virtual_cohomology_table[ [ i, j ] ] <> 0 then
 
           Add( right_boundary, j + 1 );
 
           break;
 
-        elif j = stop_root_sequence[ i + 1 ] then
+#         elif j = stop_root_sequence[ i + 1 ] then
+        elif j = Maximum( right_boundary ) + 1 then
 
           Add( right_boundary, right_boundary[ length - i ] + 1 );
         
@@ -1559,9 +1574,19 @@ InstallMethod( \+,
                [ IsCombinatorialVirtualCohomologyTableRep, IsCombinatorialVirtualCohomologyTableRep ],
 
   function( virtual_cohomology_table1, virtual_cohomology_table2 )
+    local list;
 
-    return VirtualCohomologyTable(
-      Concatenation( virtual_cohomology_table1!.LinearCombinationOfRootSequences, virtual_cohomology_table2!.LinearCombinationOfRootSequences ) );
+    list := Concatenation( virtual_cohomology_table1!.LinearCombinationOfRootSequences, virtual_cohomology_table2!.LinearCombinationOfRootSequences );
+
+    if list = [ ] then
+
+      return ZeroVirtualCohomologyTable( Dimension( virtual_cohomology_table1 ) );
+    
+    else
+   
+      return VirtualCohomologyTable( list );
+
+    fi;
 
 end );
 
@@ -1571,9 +1596,22 @@ InstallMethod( \*,
                [ IsCombinatorialVirtualCohomologyTableRep, IsRat ],
 
    function( virtual_cohomology_table, rational )
+     local list, dimension;
 
-     return VirtualCohomologyTable(
-       List( virtual_cohomology_table!.LinearCombinationOfRootSequences, summand -> [ summand[ 1 ] * rational, summand[ 2 ] ] ) );
+     list := virtual_cohomology_table!.LinearCombinationOfRootSequences;
+
+     if list = [ ] then
+
+        dimension := Dimension( virtual_cohomology_table );
+
+        return ZeroVirtualCohomologyTable( dimension );
+     
+     else
+   
+       return VirtualCohomologyTable(
+         List( list, summand -> [ summand[ 1 ] * rational, summand[ 2 ] ] ) );
+
+     fi;
 
 end );
 
@@ -1583,9 +1621,22 @@ InstallMethod( \*,
                [ IsRat, IsCombinatorialVirtualCohomologyTableRep ],
 
    function( rational, virtual_cohomology_table )
+     local list, dimension;
 
+     list := virtual_cohomology_table!.LinearCombinationOfRootSequences;
+
+     if list = [ ] then
+
+        dimension := Dimension( virtual_cohomology_table );
+
+        return ZeroVirtualCohomologyTable( dimension );
+
+     else
+   
       return VirtualCohomologyTable(
-        List( virtual_cohomology_table!.LinearCombinationOfRootSequences, summand -> [ rational * summand[ 1 ], summand[ 2 ] ] ) );
+        List( list, summand -> [ rational * summand[ 1 ], summand[ 2 ] ] ) );
+
+     fi;
 
 end );
 
@@ -2343,6 +2394,34 @@ InstallMethod( PushforwardAlongFiniteMorphism,
   
 end );
 
+##
+InstallMethod( PushforwardAlongFiniteMorphism,
+               "for a virtual cohomology table and an integer",
+               [ IsVirtualCohomologyTableRep, IsInt ],
+
+  function( virtual_cohomology_table, degree )
+    local function_of_push_forward, interval_of_virtual_cohomology_table, interval_of_push_forward;
+  
+    if degree < 1 then
+
+      Error( "the degree of the map has to be a natural number\n" );
+
+    fi;
+
+    function_of_push_forward := function( i, j )
+
+      return virtual_cohomology_table[ [ i, degree * j ] ];
+    
+    end;
+
+    interval_of_virtual_cohomology_table := IntervalSpannedByRepresentation( virtual_cohomology_table );
+    
+    interval_of_push_forward := IntervalOfRootSequences( LeftBoundary( interval_of_virtual_cohomology_table ), RightBoundary( interval_of_virtual_cohomology_table ), degree );
+
+    return VirtualCohomologyTable( function_of_push_forward, TopMaximalChain( interval_of_push_forward ) );
+    
+end );
+
 ##################################
 ##
 ## Constructors
@@ -2350,7 +2429,7 @@ end );
 ##################################
 
 ##
-InstallMethod(  PosetOfRootSequences,
+InstallMethod( PosetOfRootSequences,
                "for an integer",
                [ IsInt ],
                
@@ -2476,6 +2555,44 @@ InstallMethod( IntervalOfRootSequences,
 
 end );
 
+##
+InstallMethod( IntervalOfRootSequences,
+               "for a root sequence and an integer", 
+               [ IsRootSequenceRep, IsRootSequenceRep, IsInt ],
+
+  function( root_sequence1, root_sequence2, degree )
+    local length, left_boundary, right_boundary, i;
+
+    length := LengthOfRootSequences( UnderlyingPosetOfRootSequences( root_sequence1 ) );
+
+    #TODO: Find a better way to use the Gaussian brackets
+    left_boundary := List( [ 1 .. length ], i -> Int( Floor( Float( root_sequence1[ i ]/degree ) ) ) );
+
+    for i in [ 2 .. length ] do
+
+      if left_boundary[ i - 1 ] <= left_boundary[ i ] then
+
+        left_boundary[ i ] := Minimum( left_boundary[ i ] - 1, left_boundary[ i - 1 ] - 1 );
+
+      fi;
+    
+    od;
+
+    right_boundary := List( [ 1 .. length ], i -> Int( Ceil( Float( root_sequence2[ i ]/degree ) ) ) );
+
+    for i in Reversed( [ 2 .. length ] ) do
+
+      if right_boundary[ i - 1 ] <= right_boundary[ i ] then
+
+        right_boundary[ i - 1 ] := Maximum( right_boundary[ i ] + 1, right_boundary[ i - 1 ] + 1 );
+
+      fi;
+
+    od;
+
+    return IntervalOfRootSequences( RootSequence( left_boundary ), RootSequence( right_boundary ) );
+               
+end );
 
 ##
 InstallMethod( MorphismOfIntervalsOfRootSequences,
@@ -2590,6 +2707,88 @@ InstallMethod( VirtualCohomologyTable,
 
     return VirtualCohomologyTable( list );
   
+end );
+
+##
+InstallMethod( ZeroVirtualCohomologyTable,
+               "for an integer",
+               [ IsInt ],
+
+  function( dimension )
+
+    if dimension < 1 then
+
+      Error( "the dimension must be a natural number" );
+    
+    fi;
+
+    return VirtualCohomologyTable( [ [ 0, RootSequence( [ 1 .. dimension ] ) ] ] );
+               
+end );
+
+##
+InstallMethod( VirtualCohomologyTable,
+               "for a function and and a list",
+               [ IsFunction, IsList ],
+
+  function( table_function, list_of_root_sequences )
+    local root_sequence, dimension, length, modified_table_function, r, virtual_cohomology_table, supernatural_table, coefficient, i, j, l;
+
+    #TODO: Check the underlying poset of root sequences
+    if false in List( list_of_root_sequences, IsRootSequenceRep ) then
+
+      Error( "the given list must only contain root sequences\n" );
+    
+    fi;
+
+    dimension := LengthOfRootSequences( UnderlyingPosetOfRootSequences( list_of_root_sequences[ 1 ] ) );
+
+    length := Length( list_of_root_sequences );
+
+    virtual_cohomology_table := ZeroVirtualCohomologyTable( dimension );
+
+    modified_table_function := function( i, j, table )
+
+      return table_function( i, j ) - table[ [ i, j ] ];
+    
+    end;
+  
+    for r in Reversed( [ 1 .. length ] ) do
+    
+      supernatural_table := CohomologyTable( list_of_root_sequences[ r ] );
+    
+      if r = 1 then
+
+        i := 0;
+      
+        j := list_of_root_sequences[ r ][ 1 ] + 1;
+        
+      else
+
+        for l in Reversed( [ 1 .. dimension ] ) do
+
+          if list_of_root_sequences[ r ][ l ] > list_of_root_sequences[ r - 1 ][ l ] then
+
+            break;
+
+          fi;
+        
+        od;
+        
+        i := l;
+
+        j := list_of_root_sequences[ r ][ i ] - 1;
+       
+      fi;
+
+      coefficient := modified_table_function( i, j, virtual_cohomology_table ) / supernatural_table[ [ i, j ] ];
+
+      virtual_cohomology_table := virtual_cohomology_table + coefficient * supernatural_table;
+    
+    od;
+
+    return virtual_cohomology_table;
+               
 end );
 
 ##

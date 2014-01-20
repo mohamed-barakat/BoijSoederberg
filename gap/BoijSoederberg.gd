@@ -469,6 +469,9 @@ DeclareOperation( "K0ElementLift",
 
 DeclareOperation( "PushforwardAlongFiniteMorphism",
                   [ IsVirtualHilbertPolynomial, IsInt ] );
+
+DeclareOperation( "PushforwardAlongFiniteMorphism",
+                  [ IsVirtualCohomologyTable, IsInt ] );
                   
 #################################
 ##
@@ -509,6 +512,9 @@ DeclareOperation( "IntervalOfRootSequences",
 DeclareOperation( "IntervalOfRootSequences",
                   [ IsRootSequence ] );
 
+DeclareOperation( "IntervalOfRootSequences",
+                  [ IsRootSequence, IsRootSequence, IsInt ] );
+
 #! @Description
 #! The interval_of_root_sequences_source must be contained in interval_of_root_sequences_source.
 #! It constructs  a morphism from <A>interval_of_root_sequences_source</A> to <A>interval_of_root_sequences_range</A>.
@@ -532,6 +538,12 @@ DeclareOperation( "VirtualCohomologyTable",
 #! @Arguments list, interval_of_root_sequences
 DeclareOperation( "VirtualCohomologyTable",
                   [ IsList, IsIntervalOfRootSequences ] );
+
+DeclareOperation( "ZeroVirtualCohomologyTable",
+                  [ IsInt ] );
+                  
+DeclareOperation( "VirtualCohomologyTable",
+                  [ IsFunction, IsList ] );
 
 #! @Description
 #! The argument is a list of rational numbers, where the i-th argument contains the i-1-th coefficient of
