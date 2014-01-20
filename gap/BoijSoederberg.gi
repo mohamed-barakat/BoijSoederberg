@@ -2323,6 +2323,26 @@ InstallMethod( K0ElementLift,
                   
 end );
 
+##
+InstallMethod( PushforwardAlongFiniteMorphism,
+               "for a virtual Hilbert polynomial and an integer",
+               [ IsVirtualHilbertPolynomial, IsInt ],
+
+  function( virtual_hilbert_polynomial, degree )
+    local t;
+
+    if degree < 1 then
+
+      Error( "the degree of the map has to be a natural number\n" );
+    
+    fi; 
+    
+    t := VariableForHilbertPolynomial( );
+  
+    return VirtualHilbertPolynomial( Value( UnderlyingPolynomial( virtual_hilbert_polynomial ), degree * t ) );
+  
+end );
+
 ##################################
 ##
 ## Constructors

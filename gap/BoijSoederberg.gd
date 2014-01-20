@@ -466,6 +466,9 @@ DeclareOperation( "Twist",
 
 DeclareOperation( "K0ElementLift",
                   [ IsVirtualCohomologyTable, IsInt ] );
+
+DeclareOperation( "PushforwardAlongFiniteMorphism",
+                  [ IsVirtualHilbertPolynomial, IsInt ] );
                   
 #################################
 ##
