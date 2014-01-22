@@ -486,6 +486,12 @@ InstallMethod( IsIntegral,
     local interval_of_minimal_ambient_space, ambient_space, morphism, row,
     pair, homalg_map, list_of_coefficients;
 
+    if virtual_cohomology_table[ [ 0, 1000 ] ] <> 0 then
+
+      return false;
+
+    fi;
+    
     #TODO: this has to become modular! Also use in IsZero!  
     interval_of_minimal_ambient_space := IntervalSpannedByRepresentation( virtual_cohomology_table );
 
@@ -843,7 +849,6 @@ InstallMethod( BettiTable,
 end );
 
 ##TODO: Correct underlying set of root sequences here and in MinimalIntervalOfAmbientSpace
-##BUG: Start with the smallest value first!!
 InstallMethod( RightBoundaryOfMinimalInterval,
                "for a virtual cohomology table",
                [ IsVirtualCohomologyTableRep ],
@@ -2205,6 +2210,17 @@ end );
 
 ##
 InstallMethod( Twist,
+               "for an interval of root sequences and an integer",
+               [ IsIntervalOfRootSequencesRep, IsInt ],
+
+  function( interval_of_root_sequences, twist )
+
+    return IntervalOfRootSequences( Twist( LeftBoundary( interval_of_root_sequences ), twist ), Twist( RightBoundary( interval_of_root_sequences ), twist ) );
+
+end );
+
+##
+InstallMethod( Twist,
                "for a virtual cohomology table and an integer",
                [ IsVirtualCohomologyTableRep, IsInt ],
 
@@ -2422,6 +2438,106 @@ InstallMethod( PushforwardAlongFiniteMorphism,
     
 end );
 
+##
+##
+InstallMethod( PullbackAlongFiniteMorphism,
+               "for a virtual cohomology table and an integer",
+               [ IsVirtualCohomologyTableRep, IsInt ],
+
+  function( virtual_cohomology_table, degree )
+    local dimension, structure_sheaf, twist_list, twist, twistmax, twistmin, shift, entry, function_of_pullback, interval_of_virtual_cohomology_table, interval_of_pullback;
+
+  dimension := Dimension( virtual_cohomology_table );
+
+  structure_sheaf := CohomologyTable( RootSequence( List( [ - dimension .. - 1 ], i -> i ) ) );
+  
+  if degree < 1 then
+
+    Error( "the degree of the map has to be a natural number\n" );
+
+  fi;
+
+  twist_list := [ ];
+
+  twist := [ ];
+  
+  for shift in [ 0 .. degree - 1 ] do
+  
+    entry := PushforwardAlongFiniteMorphism( Twist( structure_sheaf, shift ), degree );
+
+    entry := BoijSoederbergDecomposition( entry );
+
+    Append( twist, List( entry, l -> ( -1 ) *  l[ 2 ][ 1 ] + 1 ) );
+    
+    entry := List( entry, l -> l[ 1 ] * Twist( virtual_cohomology_table, ( -1 ) * ( l[ 2 ][ 1 ] + 1 ) ) );
+
+    entry := Sum( entry );
+    
+    Add( twist_list, entry );
+  
+  od;
+
+  function_of_pullback := function( i, j )
+
+    return twist_list[ j mod degree + 1 ][ [ i, ( j - ( j mod degree ) )/ degree ] ]; 
+
+  end;
+
+  interval_of_pullback :=
+    List( [ 0 .. Length( twist_list ) - 1 ], i -> Twist( IntervalSpannedByRepresentation( twist_list[ i + 1 ] ), - i ) );
+
+  interval_of_pullback :=
+    List( interval_of_pullback, i ->
+          IntervalOfRootSequences( LeftBoundary( i ), RightBoundary( i ), 1/degree )
+        );
+
+  interval_of_pullback :=
+    IntervalOfRootSequences(
+      Infimum( List( interval_of_pullback, LeftBoundary ) ),
+      Supremum( List( interval_of_pullback, RightBoundary ) )
+    );
+    
+  return VirtualCohomologyTable( function_of_pullback, TopMaximalChain( interval_of_pullback ) );
+
+end );
+
+##
+InstallMethod( CotangentBundle,
+               "for an integer",
+               [ IsInt ],
+
+  function( dimension )
+    local root_sequence;
+
+    root_sequence := List( [ -dimension .. -2 ], i -> i );
+
+    Add( root_sequence, 0 );
+
+    return dimension * CohomologyTable( Twist( RootSequence( root_sequence ), - 1 ) );
+  
+end );
+
+##
+InstallMethod( HorrocksMumfordBundle,
+               [ ],
+
+  function( )
+    local R1, R2, R3, R4, R5;
+  
+    R1 := RootSequence( [ 6, 1, -1, -4 ] );
+
+    R2 := RootSequence( [ 5, 1, -1, -4 ] );
+
+    R3 := RootSequence( [ 5, 1, -1, -5 ] );
+
+    R4 := RootSequence( [ 4, 1, -1, -5 ] );
+
+    R5 := RootSequence( [ 4, 1, -1, -6 ] );
+
+    return VirtualCohomologyTable( [ [ 2/9, R1 ], [ 7/45, R2 ], [ 56/45, R3 ], [ 7/45, R4 ], [ 14/63, R5 ] ] );
+  
+end );
+
 ##################################
 ##
 ## Constructors
@@ -2558,7 +2674,7 @@ end );
 ##
 InstallMethod( IntervalOfRootSequences,
                "for a root sequence and an integer", 
-               [ IsRootSequenceRep, IsRootSequenceRep, IsInt ],
+               [ IsRootSequenceRep, IsRootSequenceRep, IsRat ],
 
   function( root_sequence1, root_sequence2, degree )
     local length, left_boundary, right_boundary, i;

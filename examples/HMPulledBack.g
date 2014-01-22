@@ -70,7 +70,7 @@ twist:   -16  -15  -14  -13  -12  -11  -10   -9   -8   -7   -6   -5   -4   -3   
 Euler:  2085 1385  852  460  185    5 -100 -148 -155 -135 -100  -60  -23    5   20   20    5  -23  -60 -100 -135 -155 -148 -100    5  185  460  852 1385
 
 
-#Frage: Hängt der Pullback nur vom Grad der endlichen Abbildung ab?
+#Frage: Hängt der Pullback nur vom Grad der endlichen Abbildung ab? Ja
 
 phi := RingMap( [ y0^2 + y1^2, y1^2, y2^2, y3^2, y4^2 ], S, S2 );
 #!<A "homomorphism" of rings>

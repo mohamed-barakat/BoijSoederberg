@@ -456,6 +456,9 @@ DeclareOperation( "Twist",
                   [ IsRootSequence, IsInt ] );
 
 DeclareOperation( "Twist",
+                  [ IsIntervalOfRootSequences, IsInt ] );
+
+DeclareOperation( "Twist",
                   [ IsVirtualCohomologyTable, IsInt ] );
 
 DeclareOperation( "Twist",
@@ -472,6 +475,15 @@ DeclareOperation( "PushforwardAlongFiniteMorphism",
 
 DeclareOperation( "PushforwardAlongFiniteMorphism",
                   [ IsVirtualCohomologyTable, IsInt ] );
+
+DeclareOperation( "PullbackAlongFiniteMorphism",
+                  [ IsVirtualCohomologyTable, IsInt ] );
+
+DeclareOperation( "CotangentBundle",
+                  [ IsInt ] );
+
+DeclareOperation( "HorrocksMumfordBundle",
+                  [ ] );
                   
 #################################
 ##
@@ -513,7 +525,7 @@ DeclareOperation( "IntervalOfRootSequences",
                   [ IsRootSequence ] );
 
 DeclareOperation( "IntervalOfRootSequences",
-                  [ IsRootSequence, IsRootSequence, IsInt ] );
+                  [ IsRootSequence, IsRootSequence, IsRat ] );
 
 #! @Description
 #! The interval_of_root_sequences_source must be contained in interval_of_root_sequences_source.
