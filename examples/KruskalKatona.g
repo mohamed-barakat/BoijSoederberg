@@ -8,7 +8,7 @@ S := GradedRing( R );;
 
 A := KoszulDualRing( S, "e0..e4" );;
 
-#! lexsegment ideal
+# lexsegment ideal
 mat := HomalgMatrix( "[ e0, e1, e2, e3, e4 ]", 1, 5, A );
 # mat := HomalgMatrix( "[ e3*e4, e2*e4, e2*e3, e1*e4 ]", 1, 5, A );
 

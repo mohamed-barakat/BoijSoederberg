@@ -1,38 +1,20 @@
-/Makefile
+# git-ls-files --others --exclude-from=.git/info/exclude
+# Lines that start with '#' are comments.
+# For a project mostly in C, the following would be a good set of
+# exclude patterns (uncomment them if you want to use them):
+# *.[oa]
 *~
-/bin
-talks
-papers
+bin
 change.log
+VERSION
+public_html
 public_html.version
-
-*.swp
-
-examples/c1_0_c2_3/*.pdf                                                                                                                                             
-examples/c1_0_c2_3/*.html
-examples/c1_0_c2_3/*.txt
-examples/c1_0_c2_3/*.six
-examples/c1_0_c2_3/*Bib.xml
-examples/c1_0_c2_3/*Bib.xml.bib
-examples/c1_0_c2_3/*.aux
-examples/c1_0_c2_3/*.bbl
-examples/c1_0_c2_3/*.blg
-examples/c1_0_c2_3/*.brf
-examples/c1_0_c2_3/*.idx
-examples/c1_0_c2_3/*.ilg
-examples/c1_0_c2_3/*.ind
-examples/c1_0_c2_3/*.log
-examples/c1_0_c2_3/*.pnr
-examples/c1_0_c2_3/*.tex
-examples/c1_0_c2_3/*.toc
-examples/c1_0_c2_3/*.out
-examples/c1_0_c2_3/manual.lab
-
-
+doc/manual.six
 doc/*.pdf
 doc/*.html
 doc/*.txt
-doc/*.six
+doc/*.css
+doc/*.js
 doc/*Bib.xml
 doc/*Bib.xml.bib
 doc/*.aux
@@ -49,11 +31,5 @@ doc/*.toc
 doc/*.out
 doc/manual.lab
 *.DS_Store
-/polymake
-*.txt
-/test
-.gitold/
-libpolymake-dlopen.patch
-/polymake-svn
-/polymakesave
-VERSION
+doc/*.xml
+maketest.g

@@ -2,7 +2,7 @@ SetPackageInfo( rec(
 
 PackageName := "BoijSoederberg",
 
-Subtitle := "A package for Boij Soederberg theory",
+Subtitle := "A package for Boij Söderberg theory",
 
 Version := "0.1",
 
@@ -16,9 +16,13 @@ Persons := [
     LastName := "Posur",
     WWWHome := "http://wwwb.math.rwth-aachen.de/Mitarbeiter/posur.php",
     Email := "sposur@momo.math.rwth-aachen.de",
-    PostalAddress := "Lehrstuhl B für Mathematik RWTH - Aachen\nTemplergraben 64\n52062 Aachen\nGermany",
+    PostalAddress := Concatenation( [
+                   "Lehrstuhl B für Mathematik RWTH - Aachen\n",
+                   "Templergraben 64\n",
+                   "52062 Aachen\n",
+                   "Germany" ] ),
     Place := "Aachen",
-    Institution := "Rheinisch-Westfaelische Technische Hochschule Aachen",
+    Institution := "Rheinisch-Westfälische Technische Hochschule Aachen",
   ),
 ],
 
@@ -41,7 +45,7 @@ PackageDoc := rec(
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
-  LongTitle := "A package for Boij Soederberg theory",
+  LongTitle := "A package for Boij Söderberg theory",
 ),
 
 Dependencies := rec(
@@ -64,7 +68,7 @@ AvailabilityTest := function()
 
 Autoload := false,
 
-Keywords := [ "Boij Soederberg", "Vector Bundles", "Cohomology Tables" ]
+Keywords := [ "Boij Söderberg", "Vector Bundles", "Cohomology Tables" ]
 
 ));
 
