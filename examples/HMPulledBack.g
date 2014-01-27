@@ -53,9 +53,9 @@ phi := RingMap( [ y0^2, y1^2, y2^2, y3^2, y4^2 ], S, S2 );
 P := Pullback( phi, M );
 
 T := TateResolution( P, -12 , 12 );
-#! <An acyclic cocomplex containing 24 morphisms of graded left modules at degrees [ -12 .. 12 ]>
+# <An acyclic cocomplex containing 24 morphisms of graded left modules at degrees [ -12 .. 12 ]>
 B3 := BettiTable( T3 );
-#!<A Betti diagram of <An acyclic cocomplex containing 24 morphisms of graded left modules at degrees [ -12 .. 12 ]>>
+# <A Betti diagram of <An acyclic cocomplex containing 24 morphisms of graded left modules at degrees [ -12 .. 12 ]>>
 Display( B3 );
 total:  2085 1387  864  500  285  195  172  159  135  100   62   35   25   25   35   62  100  135  159  172  195  285  500  864 1387    ?    ?    ?    ?
 -----------|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
@@ -73,13 +73,13 @@ Euler:  2085 1385  852  460  185    5 -100 -148 -155 -135 -100  -60  -23    5   
 #Frage: Hängt der Pullback nur vom Grad der endlichen Abbildung ab? Ja
 
 phi := RingMap( [ y0^2 + y1^2, y1^2, y2^2, y3^2, y4^2 ], S, S2 );
-#!<A "homomorphism" of rings>
+#<A "homomorphism" of rings>
 P := Pullback( phi, M );
-#!<A graded left module presented by 94 relations for 19 generators>
+#<A graded left module presented by 94 relations for 19 generators>
 T := TateResolution( P, -5 , 5 );
-#!<An acyclic cocomplex containing 10 morphisms of graded left modules at degrees [ -5 .. 5 ]>
+#<An acyclic cocomplex containing 10 morphisms of graded left modules at degrees [ -5 .. 5 ]>
 B := BettiTable( T );
-#!<A Betti diagram of <An acyclic cocomplex containing 10 morphisms of graded left modules at degrees [ -5 .. 5 ]>>
+#<A Betti diagram of <An acyclic cocomplex containing 10 morphisms of graded left modules at degrees [ -5 .. 5 ]>>
 Display( B );
 total:   159  135  100   62   35   25   25   35   62  100  135    ?    ?    ?
 -----------|----|----|----|----|----|----|----|----|----|----|----|----|----|

@@ -1,14 +1,4 @@
-#! @Title Boij Söderberg
-#! @Author Sebastian Posur
-
-#! @Chapter BoijSoederberg
-LoadPackage( "comb" );
-
-LoadPackage( "GradedModules" );
-
-LoadPackage( "Convex" );
-
-LoadPackage( "4ti2Interface" );
+#! @Chapter Boij Söderberg theory
 
 #################################
 ##
@@ -42,11 +32,9 @@ DeclareCategory( "IsMorphismOfVectorSpacesWithIntegralStructure", IsObject );
 
 #################################
 ##
-## Properties
+#! @Section Properties
 ##
 #################################
-
-#! @Section Properties
 
 ## IsVectorSpaceWithIntegralStructure
 #! @Description Returns true if the given vector space with integral structure has an embedding into a super space, false otherwise.
@@ -73,11 +61,10 @@ DeclareProperty( "IsIntegral",
 
 #################################
 ##
-## Attributes
+#! @Section Attributes
 ##
 #################################
 
-#! @Section Attributes
 
 ## IsPosetOfRootSequences
 #! @Description Returns the length of the root sequence in this poset.
@@ -328,11 +315,9 @@ DeclareAttribute( "Range",
                   
 #################################
 ##
-## Operations
+#! @Section Operations
 ##
 #################################
-
-#! @Section Operations
 
 #! @Description Computes the value of <A>virtual_hilbert_polynomial</A> at <A>rational</A>
 #! @Returns a rational number
@@ -487,11 +472,10 @@ DeclareOperation( "HorrocksMumfordBundle",
                   
 #################################
 ##
-## Constructors
+#! @Section Constructors
 ##
 #################################
 
-#! @Section Constructors
 
 #! @Description Constructs a poset of root sequences of given length.
 #! @Returns a poset of root sequences
@@ -631,13 +615,12 @@ DeclareOperation( "MorphismOfVectorSpacesWithIntegralStructure",
 #! @Arguments IsVectorSpaceWithIntegralStructure, IsHomalgMap
 DeclareOperation( "MorphismOfVectorSpacesWithIntegralStructure",
                   [ IsVectorSpaceWithIntegralStructure, IsHomalgMap ] );
-#################################
-##
-## Functors
-##
-#################################
 
+#################################
+##
 #! @Section Functors
+##
+#################################
 
 ## VectorSpaceOfVirtualHilbertPolynomials
 DeclareGlobalVariable( "functor_VectorSpaceOfVirtualHilbertPolynomials" );
