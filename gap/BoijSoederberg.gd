@@ -166,7 +166,12 @@ DeclareAttribute( "Range",
                   IsMorphismOfIntervalsOfRootSequences );
 
 ## IsVirtualCohomologyTable
-##TODO: Change name
+DeclareAttribute( "EmbeddingIntoSuperVectorSpace",
+                  IsVirtualCohomologyTable );
+
+DeclareAttribute( "MinimalIntegralRepresentation",
+                  IsVirtualCohomologyTable );
+
 #! @Description Returns the poset of root sequences associated to the given virtual cohomology table.
 #! @Returns a poset of root sequences
 #! @Arguments virtual_cohomology_table

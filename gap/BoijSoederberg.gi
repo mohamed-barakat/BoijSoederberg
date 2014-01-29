@@ -478,27 +478,21 @@ end );
 
 ## IsVirtualCohomologyTable
 ##
-InstallMethod( IsIntegral,
+InstallMethod( EmbeddingIntoSuperVectorSpace,
                "for a virtual cohomology table",
                [ IsVirtualCohomologyTableRep ],
 
   function( virtual_cohomology_table )
     local interval_of_minimal_ambient_space, ambient_space, morphism, row,
-    pair, homalg_map, list_of_coefficients;
+    pair, homalg_map, list_of_coefficients, source, multiple;
 
-    if virtual_cohomology_table[ [ 0, 1000 ] ] <> 0 then
-
-      return false;
-
-    fi;
-    
-    #TODO: this has to become modular! Also use in IsZero!  
+    #TODO: this has to become modular! Also use in IsZero!
     interval_of_minimal_ambient_space := IntervalSpannedByRepresentation( virtual_cohomology_table );
 
     ambient_space := VectorSpaceOfVirtualCohomologyTables( interval_of_minimal_ambient_space );
 
     row := [ ];
-    
+
     for pair in virtual_cohomology_table!.LinearCombinationOfRootSequences do
 
       morphism :=
@@ -515,21 +509,74 @@ InstallMethod( IsIntegral,
     od;
 
     SetPositionOfTheDefaultPresentation( UnderlyingVectorSpace( ambient_space ), PositionOfConcretePresentation( ambient_space ) );
+
+    source := HomalgFreeLeftModule( 1, BOIJ_SOEDERBERG.CategoryOfVectorSpacesOfVirtualCohomologyTables!.QQ );
     
     homalg_map :=
       HomalgMap( [ row ],
-      HomalgFreeLeftModule( 1, BOIJ_SOEDERBERG.CategoryOfVectorSpacesOfVirtualCohomologyTables!.QQ ),
+      source,
       UnderlyingVectorSpace( ambient_space ),
       BOIJ_SOEDERBERG.CategoryOfVectorSpacesOfVirtualCohomologyTables!.QQ
       );
 
+    IsMonomorphism( homalg_map );
+
+    return MorphismOfVectorSpacesWithIntegralStructure( ambient_space, homalg_map );
+      
+end );
+
+##
+InstallMethod( IsIntegral,
+               "for a virtual cohomology table",
+               [ IsVirtualCohomologyTableRep ],
+
+  function( virtual_cohomology_table )
+    local embedding_into_super_vector_space, source, ambient_space, list_of_coefficients;
+
+    embedding_into_super_vector_space := EmbeddingIntoSuperVectorSpace( virtual_cohomology_table );
+
+    source := Source( embedding_into_super_vector_space );
+
+    #TODO: determine the concrete presentation of the source
+    SetPositionOfTheDefaultPresentation( UnderlyingVectorSpace( source ), 1 );#PositionOfConcretePresentation( source ) );
+    
+    ambient_space := Range( embedding_into_super_vector_space );
+    
     SetPositionOfTheDefaultPresentation( UnderlyingVectorSpace( ambient_space ), ambient_space!.LatticePosition );
 
-    list_of_coefficients := EntriesOfHomalgMatrix( MatrixOfMap( homalg_map ) );
+    list_of_coefficients := EntriesOfHomalgMatrix( MatrixOfMap( UnderlyingMorphism( embedding_into_super_vector_space ) ) );
     
     return not false in List( list_of_coefficients, IsInt  );
 
 end );
+
+##
+InstallMethod( MinimalIntegralRepresentation,
+               "for a virtual cohomology table",
+               [ IsVirtualCohomologyTable ],
+
+  function( virtual_cohomology_table )
+
+  local embedding_into_super_vector_space, source, ambient_space, list_of_coefficients, multiple;
+
+    embedding_into_super_vector_space := EmbeddingIntoSuperVectorSpace( virtual_cohomology_table );
+
+    source := Source( embedding_into_super_vector_space );
+
+    #TODO: determine the concrete presentation of the source
+    SetPositionOfTheDefaultPresentation( UnderlyingVectorSpace( source ), 1 );#PositionOfConcretePresentation( source ) );
+
+    ambient_space := Range( embedding_into_super_vector_space );
+
+    SetPositionOfTheDefaultPresentation( UnderlyingVectorSpace( ambient_space ), ambient_space!.LatticePosition );
+
+    list_of_coefficients := EntriesOfHomalgMatrix( MatrixOfMap( UnderlyingMorphism( embedding_into_super_vector_space ) ) );
+
+    multiple := Lcm( List( list_of_coefficients, DenominatorRat ) )/ Gcd( List( list_of_coefficients, NumeratorRat ) );
+
+    return multiple * virtual_cohomology_table;
+
+end  );
 
 ##
 InstallMethod( IsZero,

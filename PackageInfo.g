@@ -4,9 +4,9 @@ PackageName := "BoijSoederberg",
 
 Subtitle := "A package for Boij Söderberg theory",
 
-Version := "0.1",
+Version := "1.0",
 
-Date := "04/12/2013",
+Date := "29/01/2014",
 
 Persons := [
   rec(
@@ -28,8 +28,7 @@ Persons := [
 
 Status := "dev",
 
-PackageWWWHome := "http://www.TODO.INSERT.WEBPAGE.HERE/",
-#PackageWWWHome := "http://github.com/username/BoijSoederberg/",
+PackageWWWHome := "http://github.com/sebastianpos/BoijSoederberg/",
 
 ArchiveFormats := ".tar.gz",
 
@@ -68,7 +67,7 @@ AvailabilityTest := function()
 
 Autoload := false,
 
-Keywords := [ "Boij Söderberg", "Vector Bundles", "Cohomology Tables" ]
+Keywords := [ "Boij-Söderberg", "Vector bundles", "Cohomology tables" ]
 
 ));
 
