@@ -551,32 +551,15 @@ InstallMethod( IsIntegral,
 end );
 
 ##
-InstallMethod( MinimalIntegralRepresentation,
+InstallMethod( IsPointSymmetric,
                "for a virtual cohomology table",
                [ IsVirtualCohomologyTable ],
 
   function( virtual_cohomology_table )
 
-  local embedding_into_super_vector_space, source, ambient_space, list_of_coefficients, multiple;
-
-    embedding_into_super_vector_space := EmbeddingIntoSuperVectorSpace( virtual_cohomology_table );
-
-    source := Source( embedding_into_super_vector_space );
-
-    #TODO: determine the concrete presentation of the source
-    SetPositionOfTheDefaultPresentation( UnderlyingVectorSpace( source ), 1 );#PositionOfConcretePresentation( source ) );
-
-    ambient_space := Range( embedding_into_super_vector_space );
-
-    SetPositionOfTheDefaultPresentation( UnderlyingVectorSpace( ambient_space ), ambient_space!.LatticePosition );
-
-    list_of_coefficients := EntriesOfHomalgMatrix( MatrixOfMap( UnderlyingMorphism( embedding_into_super_vector_space ) ) );
-
-    multiple := Lcm( List( list_of_coefficients, DenominatorRat ) )/ Gcd( List( list_of_coefficients, NumeratorRat ) );
-
-    return multiple * virtual_cohomology_table;
-
-end  );
+    return virtual_cohomology_table = Twist( Dual( virtual_cohomology_table ), -( Dimension( virtual_cohomology_table ) + 1 ) );
+               
+end );
 
 ##
 InstallMethod( IsZero,
@@ -586,6 +569,12 @@ InstallMethod( IsZero,
   function( virtual_cohomology_table )
     local linear_combination_of_root_sequences, elementary_interval_embedding, ambient_interval, embedding;
 
+    if virtual_cohomology_table[ [ 0, 1000 ] ] <> 0 then
+
+      return false;
+
+    fi;
+    
     linear_combination_of_root_sequences := virtual_cohomology_table!.LinearCombinationOfRootSequences;
 
     ambient_interval := IntervalSpannedByRepresentation( virtual_cohomology_table );
@@ -824,6 +813,67 @@ InstallMethod( KernelEntries,
 end );
 
 ## IsVirtualCohomologyTable
+##
+InstallMethod( K0ElementOfStableModuleCategory,
+               "for a virtual cohomology table",
+               [ IsVirtualCohomologyTable ],
+
+  function( virtual_cohomology_table )
+
+    return K0ElementOfStableModuleCategory( VirtualHilbertPolynomial( virtual_cohomology_table ) );
+  
+end );
+
+##
+InstallMethod( TwistedChernPolynomial,
+               "for a virtual cohomology table", 
+               [ IsVirtualCohomologyTable ],
+
+  function( virtual_cohomology_table )
+
+    return TwistedChernPolynomial( VirtualHilbertPolynomial( virtual_cohomology_table ) );
+
+end );
+
+##
+InstallMethod( ChernPolynomial,
+               "for a virtual cohomology table",
+               [ IsVirtualCohomologyTable ],
+
+  function( virtual_cohomology_table )
+
+    return ChernPolynomial( VirtualHilbertPolynomial( virtual_cohomology_table) );
+  
+end );
+
+##
+InstallMethod( MinimalIntegralRepresentation,
+               "for a virtual cohomology table",
+               [ IsVirtualCohomologyTable ],
+
+  function( virtual_cohomology_table )
+
+  local embedding_into_super_vector_space, source, ambient_space, list_of_coefficients, multiple;
+
+    embedding_into_super_vector_space := EmbeddingIntoSuperVectorSpace( virtual_cohomology_table );
+
+    source := Source( embedding_into_super_vector_space );
+
+    #TODO: determine the concrete presentation of the source
+    SetPositionOfTheDefaultPresentation( UnderlyingVectorSpace( source ), 1 );#PositionOfConcretePresentation( source ) );
+
+    ambient_space := Range( embedding_into_super_vector_space );
+
+    SetPositionOfTheDefaultPresentation( UnderlyingVectorSpace( ambient_space ), ambient_space!.LatticePosition );
+
+    list_of_coefficients := EntriesOfHomalgMatrix( MatrixOfMap( UnderlyingMorphism( embedding_into_super_vector_space ) ) );
+
+    multiple := Lcm( List( list_of_coefficients, DenominatorRat ) )/ Gcd( List( list_of_coefficients, NumeratorRat ) );
+
+    return multiple * virtual_cohomology_table;
+
+end  );
+
 ##
 InstallMethod( Dimension,
                "for a virtual cohomology table",
@@ -1693,6 +1743,28 @@ InstallMethod( \*,
 end );
 
 ##
+InstallMethod( \=,
+               "for a pair of virtual cohomology tables",
+               [ IsVirtualCohomologyTableRep, IsVirtualCohomologyTableRep ],
+
+  function( virtual_cohomology_table1, virtual_cohomology_table2 )
+
+    return IsZero( virtual_cohomology_table1 - virtual_cohomology_table2 );
+  
+end );
+
+##
+InstallMethod( \=,
+               "for a pair of virtual Hilbert polynomials",
+               [ IsVirtualHilbertPolynomialRep, IsVirtualHilbertPolynomialRep ],
+
+  function( virtual_hilbert_polynomial1, virtual_hilbert_polynomial2 )
+
+    return IsZero( virtual_hilbert_polynomial1 - virtual_hilbert_polynomial2 );
+
+end );
+
+##
 InstallMethod( SetDisplayInterval,
                "for a list",
                [ IsList ],
@@ -2549,7 +2621,7 @@ InstallMethod( PullbackAlongFiniteMorphism,
 end );
 
 ##
-InstallMethod( CotangentBundle,
+InstallMethod( CohomologyTableOfCotangentBundle,
                "for an integer",
                [ IsInt ],
 
@@ -2565,7 +2637,7 @@ InstallMethod( CotangentBundle,
 end );
 
 ##
-InstallMethod( HorrocksMumfordBundle,
+InstallMethod( CohomologyTableOfHorrocksMumfordBundle,
                [ ],
 
   function( )

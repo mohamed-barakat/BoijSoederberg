@@ -59,6 +59,9 @@ DeclareProperty( "IsIntegral",
 DeclareProperty( "IsIntegral",
                  IsVirtualCohomologyTable );
 
+DeclareProperty( "IsPointSymmetric",
+                 IsVirtualCohomologyTable );
+
 #################################
 ##
 #! @Section Attributes
@@ -215,6 +218,15 @@ DeclareAttribute( "Dual",
                   IsVirtualCohomologyTable );
 
 DeclareAttribute( "Dimension",
+                  IsVirtualCohomologyTable );
+
+DeclareAttribute( "K0ElementOfStableModuleCategory",
+                  IsVirtualCohomologyTable );
+
+DeclareAttribute( "TwistedChernPolynomial",
+                  IsVirtualCohomologyTable );
+
+DeclareAttribute( "ChernPolynomial",
                   IsVirtualCohomologyTable );
 
 #NOT CORRECT
@@ -381,7 +393,7 @@ DeclareOperation( "\*",
                   [ IsVirtualCohomologyTable, IsRat ] );
 
 DeclareOperation( "\*",
-                  [ IsRat, IsVirtualCohomologyTable ] );          
+                  [ IsRat, IsVirtualCohomologyTable ] );
                   
 #! @Description The input is a list of root sequences. The operation returns the list of coefficients of the given polynomial up to degree <A>degree</A>.
 #! @Returns a list
@@ -469,10 +481,10 @@ DeclareOperation( "PushforwardAlongFiniteMorphism",
 DeclareOperation( "PullbackAlongFiniteMorphism",
                   [ IsVirtualCohomologyTable, IsInt ] );
 
-DeclareOperation( "CotangentBundle",
+DeclareOperation( "CohomologyTableOfCotangentBundle",
                   [ IsInt ] );
 
-DeclareOperation( "HorrocksMumfordBundle",
+DeclareOperation( "CohomologyTableOfHorrocksMumfordBundle",
                   [ ] );
                   
 #################################
