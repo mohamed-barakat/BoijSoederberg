@@ -2491,6 +2491,8 @@ InstallMethod( K0ElementLift,
 
       further_modifications := true;
 
+      Error( "the computed representative is not uniquely determined in the range [ ", lower_bound, " .. ", upper_bound, " ]\n" );
+
     else
 
       further_modifications := false;
@@ -2501,11 +2503,9 @@ InstallMethod( K0ElementLift,
 
     #is every entry nonnegative?
 
-    
-    
     #is the lowest socle still correct?
-    
-    return [ lower_bound, upper_bound , k0_element, further_modifications ];
+
+    return k0_element;
                   
 end );
 
