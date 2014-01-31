@@ -134,7 +134,7 @@ BOIJ_SOEDERBERG.CategoryOfVectorSpacesOfVirtualCohomologyTables :=
           MorphismConstructor := ReturnTrue,
           containers := rec( ),
           QQ := BOIJ_SOEDERBERG.CategoryOfVectorSpacesOfVirtualHilbertPolynomials!.QQ,
-          display_interval := [ -5 .. 5 ]       )
+          display_interval := [ -7 .. 7 ]       )
        
 );
 
@@ -3289,6 +3289,8 @@ InstallMethod( MorphismOfVectorSpacesWithIntegralStructure,
     fi;
                                              
     source := VectorSpaceWithIntegralStructure( structure_morphism_of_source );
+
+    
     
     morphism_of_vector_spaces_with_integral_structure := MorphismOfVectorSpacesWithIntegralStructure( source, vector_space_with_integral_structure, homalg_map );
     

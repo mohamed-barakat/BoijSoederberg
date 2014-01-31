@@ -59,6 +59,8 @@ DeclareProperty( "IsIntegral",
 DeclareProperty( "IsIntegral",
                  IsVirtualCohomologyTable );
 
+#! @Description Returns true if the given virtual cohomology table is point symmetric with center 0, false otherwise.
+#! @Arguments virtual_cohomology_table                 
 DeclareProperty( "IsPointSymmetric",
                  IsVirtualCohomologyTable );
 
@@ -99,6 +101,10 @@ DeclareAttribute( "HilbertPolynomial",
 DeclareAttribute( "CohomologyTable",
                   IsRootSequence );
 
+#! @Description The input is a root sequence <A>root_sequence</A>. The dual of the corresponding supernatural virtual vector bundle is again
+#! supernatural and can thus be described again by a root sequence, which is the output of this function.
+#! @Returns a root sequence
+#! @Arguments root_sequence
 DeclareAttribute( "Dual",
                   IsRootSequence );
                   
@@ -169,9 +175,17 @@ DeclareAttribute( "Range",
                   IsMorphismOfIntervalsOfRootSequences );
 
 ## IsVirtualCohomologyTable
+#! @Description The input is a virtual cohomology table <A>virtual_cohomology_table</A>. Denote
+#! by <M>V</M> the vector space of all cohomology tables corresponding to the interval spanned by the representation of <A>virtual_cohomology_table</A>.
+#! This function returns a morphism of vector spaces with integral structure representing the embedding of <A>virtual_cohomology_table</A> into <M>V</M>.
+#! @Returns a morphism of vector spaces with integral structure
+#! @Arguments virtual_cohomology_table
 DeclareAttribute( "EmbeddingIntoSuperVectorSpace",
                   IsVirtualCohomologyTable );
 
+#! @Description Computes the smallest integeral representative on the ray spanned by the given virtual cohomology table.
+#! @Returns a virtual cohomology table
+#! @Arguments virtual_cohomology_table                                    
 DeclareAttribute( "MinimalIntegralRepresentation",
                   IsVirtualCohomologyTable );
 
@@ -214,18 +228,34 @@ DeclareAttribute( "RightBoundaryOfMinimalInterval",
 DeclareAttribute( "BoijSoederbergDecomposition",
                   IsVirtualCohomologyTable );
 
+#! @Description Computes the dual cohomology table in the sense of Serre duality.
+#! @Returns a virtual cohomology table
+#! @Arguments virtual_cohomology_table                  
 DeclareAttribute( "Dual",
                   IsVirtualCohomologyTable );
 
+#! @Description Returns the greatest integer <M>i</M> for which the <M>i</M>-th
+#! row of the cohomology table is nonzero.
+#! @Returns a virtual cohomology table
+#! @Arguments virtual_cohomology_table
 DeclareAttribute( "Dimension",
                   IsVirtualCohomologyTable );
 
+#! @Description Computes the corresponding element in the Grothendieck Group of stable modules over the exterior algebra.
+#! @Returns an element of a graded relative ring
+#! @Arguments virtual_cohomology_table                              
 DeclareAttribute( "K0ElementOfStableModuleCategory",
                   IsVirtualCohomologyTable );
 
+#! @Description Computes a pair containing the normalized Chern polynomial together with the twist which was needed for normalization.
+#! @Returns A list with an integer and a chern polynomial with rank
+#! @Arguments virtual_cohomology_table                  
 DeclareAttribute( "TwistedChernPolynomial",
                   IsVirtualCohomologyTable );
 
+#! @Description Computes the Chern polynomial with rank corresponding to the given virtual cohomology table.
+#! @Returns a chern polynomial with rank
+#! @Arguments virtual_cohomology_table      
 DeclareAttribute( "ChernPolynomial",
                   IsVirtualCohomologyTable );
 
@@ -268,10 +298,17 @@ DeclareAttribute( "TwistedChernPolynomial",
 DeclareAttribute( "ChernPolynomial",
                   IsVirtualHilbertPolynomial );
 
-##TODO: Clean this Attribute                  
+##TODO: Clean this Attribute
+#! @Description Returns the number of coefficients in the representation -1 of the given polynomial.
+#! @Returns an integer
+#! @Arguments virtual_hilbert_polynomial   
 DeclareAttribute( "Dimension",
                   IsVirtualHilbertPolynomial );
-                  
+
+#! @Description The input is a virtual Hilbert polynomial <M>p(t)</M> of dimension <M>d</M>.
+#! Returns the virtual Hilbert polynomial given by <M>(-1)^{d}p(-t - ( d + 1 ) )</M>.
+#! @Returns a virtual Hilbert polynomial
+#! @Arguments virtual_hilbert_polynomial
 DeclareAttribute( "Dual",
                   IsVirtualHilbertPolynomial );
 
@@ -312,7 +349,7 @@ DeclareAttribute( "PositionOfConcretePresentation",
 
 ## IsMorphismOfVectorSpacesWithIntegralStructure
 
-#! @Description Returns the underlying morphism of <A>\mathbb{Q}</A>-spaces of the given morphism of vector spaces with integral structure
+#! @Description Returns the underlying morphism of <M>\mathbb{Q}</M>-spaces of the given morphism of vector spaces with integral structure
 #! @Returns a Homalg map
 #! @Arguments morphism_of_vector_spaces_with_integral_structure
 DeclareAttribute( "UnderlyingMorphism",
@@ -445,9 +482,16 @@ DeclareOperation( "MacaulayExpansion",
 DeclareOperation( "KruskalKatonaFunction",
                   [ IsInt, IsInt ] );
 
+#! @Description Input: an integer. Output: The Hilbert series of the exterior algebra on an <M>n</M>-dimensional space.
+#! @Returns an element of a graded relative ring
+#! @Arguments dimension                                    
 DeclareOperation( "HilbertSeriesOfExteriorAlgebra",
                   [ IsInt ] );
 
+#! @Description The input is an integer <M>d</M>. The output is a list of Hilbert series of all possible ideals of the
+#! exterior algebra on an <M>n</M>-dimensional space.
+#! @Returns a list of elements of a graded relative ring
+#! @Arguments dimension
 DeclareOperation( "AllHilbertSeriesOfIdealsOfTheExteriorAlgebra",
                   [ IsInt ] );
 
@@ -525,6 +569,13 @@ DeclareOperation( "IntervalOfRootSequences",
 DeclareOperation( "IntervalOfRootSequences",
                   [ IsRootSequence ] );
 
+#! @Description The input is a pair <M>l, r</M> of root sequences and a rational number <M>d</M>.
+#! The output is the interval of root sequences <M>[L,R]</M>, where <M>L</M> is obtained
+#! by dividing every entry of <M>l</M> by <M>d</M> and <M>R</M> is obtained
+#! by dividing every entry of <M>r</M> by <M>d</M>. The result is adjusted in a way such that
+#! <M>[L,R]</M> represents the interval of the pushforward along a finite map of degree <M>d</M>.
+#! @Returns an interval of root sequences
+#! @Arguments root_sequence_1, root_sequence_2, degree
 DeclareOperation( "IntervalOfRootSequences",
                   [ IsRootSequence, IsRootSequence, IsRat ] );
 
@@ -552,9 +603,20 @@ DeclareOperation( "VirtualCohomologyTable",
 DeclareOperation( "VirtualCohomologyTable",
                   [ IsList, IsIntervalOfRootSequences ] );
 
+#! @Description
+#! The input is an integer <M>n</M>. Constructs the zero virtual cohomology table in <M>\mathbb{P}^n</M>.
+#! @Returns a virtual cohomology table
+#! @Arguments dimension                 
 DeclareOperation( "ZeroVirtualCohomologyTable",
                   [ IsInt ] );
-                  
+
+#! @Description
+#! The input is a function <M>f: \mathbb{Z} \times \mathbb{Z}: (i,j) \mapsto f( i, j )</M> and a list
+#! of root sequences <M>L</M>. If <M>f</M> is representable by a <M>\mathbb{Q}</M>-linear combination
+#! of the supernatural virtual cohomology tables corresponding to the elements in <M>L</M>, the function
+#! returns a virtual cohomology table with the same entries as <M>f</M>.
+#! @Returns a virtual cohomology table
+#! @Arguments a function and a list of root sequences
 DeclareOperation( "VirtualCohomologyTable",
                   [ IsFunction, IsList ] );
 

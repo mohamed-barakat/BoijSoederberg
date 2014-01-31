@@ -4,7 +4,7 @@ PackageName := "BoijSoederberg",
 
 Subtitle := "A package for Boij Söderberg theory",
 
-Version := "1.1",
+Version := "1.2",
 
 Date := "30/01/2014",
 
