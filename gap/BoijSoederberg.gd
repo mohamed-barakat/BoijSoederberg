@@ -52,17 +52,20 @@ DeclareProperty( "IsConcrete",
 #! @Arguments virtual_hilbert_polynomial
 DeclareProperty( "IsIntegral",
                  IsVirtualHilbertPolynomial );
-
+#! @InsertSystem IsIntegral_VirtualHilbertPolynomial
+                 
 ## IsVirtualCohomologyTable
 #! @Description Returns true if the given virtual cohomology table has only integral values, false otherwise.
 #! @Arguments virtual_cohomology_table
 DeclareProperty( "IsIntegral",
                  IsVirtualCohomologyTable );
+#! @InsertSystem IsIntegral_VirtualCohomologyTable                 
 
 #! @Description Returns true if the given virtual cohomology table is point symmetric with center 0, false otherwise.
 #! @Arguments virtual_cohomology_table                 
 DeclareProperty( "IsPointSymmetric",
                  IsVirtualCohomologyTable );
+#! @InsertSystem IsPointSymmetric_VirtualHilbertPolynomial
 
 #################################
 ##
@@ -93,20 +96,13 @@ DeclareAttribute( "UnderlyingPosetOfRootSequences",
 DeclareAttribute( "HilbertPolynomial",
                   IsRootSequence );
 
-#TODO: This has to become a constructor
-#! @Description Computes the virtual cohomology table associated to the virtual vector bundle of rank 1 with supernatural cohomology given by
-#! the root sequence.
-#! @Returns a virtual cohomology table
-#! @Arguments root_sequence
-DeclareAttribute( "CohomologyTable",
-                  IsRootSequence );
-
 #! @Description The input is a root sequence <A>root_sequence</A>. The dual of the corresponding supernatural virtual vector bundle is again
 #! supernatural and can thus be described again by a root sequence, which is the output of this function.
 #! @Returns a root sequence
 #! @Arguments root_sequence
 DeclareAttribute( "Dual",
                   IsRootSequence );
+#! @InsertSystem Dual_IsRootSequence                  
                   
 ## IsIntervalOfRootSequences
 #! @Description Returns the category of intervals of root sequences.
@@ -127,24 +123,28 @@ DeclareAttribute( "UnderlyingPosetOfRootSequences",
 #! @Arguments interval_of_root_sequences                  
 DeclareAttribute( "LeftBoundary",
                   IsIntervalOfRootSequences );
+#! @InsertSystem LeftBoundary_IsIntervalOfRootSequences                  
 
 #! @Description Returns the right boundary of the given interval of root sequences.
 #! @Returns a root sequence
 #! @Arguments interval_of_root_sequences                   
 DeclareAttribute( "RightBoundary",
                   IsIntervalOfRootSequences );
+#! @InsertSystem RightBoundary_IsIntervalOfRootSequences
 
 #! @Description Computes the underlying set of the given interval of root sequences.
 #! @Returns a set of root sequences
 #! @Arguments interval_of_root_sequences                   
 DeclareAttribute( "UnderlyingSet",
                   IsIntervalOfRootSequences );
+#! @InsertSystem UnderlyingSet_IsIntervalOfRootSequences                  
 
 #! @Description Computes the largest maximal chain of the given interval of root sequences.
 #! @Returns a list of root sequences
 #! @Arguments interval_of_root_sequences                     
 DeclareAttribute( "TopMaximalChain",
                   IsIntervalOfRootSequences );
+#! @InsertSystem TopMaximalChain_IsIntervalOfRootSequences                  
 
 #! @Description Computes a chain of root sequences whose corresponding Hilbert polynomials form a basis of the
 #! vector space of Hilbert polynomials within <A>interval_of_root_sequences</A>.
@@ -152,6 +152,7 @@ DeclareAttribute( "TopMaximalChain",
 #! @Arguments interval_of_root_sequences                     
 DeclareAttribute( "TopMaximalHilbertChain",
                   IsIntervalOfRootSequences );
+#! @InsertSystem TopMaximalHilbertChain_IsIntervalOfRootSequences                    
 
 #! @Description Computes the entries of a cohomology table within <A>interval_of_root_sequences</A>
 #! which can be modified without changing the Hilbert polynomial.
@@ -188,6 +189,7 @@ DeclareAttribute( "EmbeddingIntoSuperVectorSpace",
 #! @Arguments virtual_cohomology_table                                    
 DeclareAttribute( "MinimalIntegralRepresentation",
                   IsVirtualCohomologyTable );
+#! @InsertSystem MinimalIntegralRepresentation_IsVirtualCohomologyTable                  
 
 #! @Description Returns the poset of root sequences associated to the given virtual cohomology table.
 #! @Returns a poset of root sequences
@@ -221,18 +223,21 @@ DeclareAttribute( "IntervalSpannedByRepresentation",
 #! @Arguments virtual_cohomology_table                  
 DeclareAttribute( "RightBoundaryOfMinimalInterval",
                   IsVirtualCohomologyTable );
+#! @InsertSystem RightBoundaryOfMinimalInterval_IsVirtualCohomologyTable
                   
 #! @Description Computes the Boij Söderberg decomposition of a cohomology table.
 #! @Returns a linear combination of cohomology tables with supernatural cohomology
 #! @Arguments virtual_cohomology_table
 DeclareAttribute( "BoijSoederbergDecomposition",
                   IsVirtualCohomologyTable );
+#! @InsertSystem BoijSoederbergDecomposition_IsVirtualCohomologyTable                  
 
 #! @Description Computes the dual cohomology table in the sense of Serre duality.
 #! @Returns a virtual cohomology table
 #! @Arguments virtual_cohomology_table                  
 DeclareAttribute( "Dual",
                   IsVirtualCohomologyTable );
+#! @InsertSystem Dual_IsVirtualCohomologyTable                  
 
 #! @Description Returns the greatest integer <M>i</M> for which the <M>i</M>-th
 #! row of the cohomology table is nonzero.
@@ -247,7 +252,8 @@ DeclareAttribute( "Dimension",
 DeclareAttribute( "K0ElementOfStableModuleCategory",
                   IsVirtualCohomologyTable );
 
-#! @Description Computes a pair containing the normalized Chern polynomial together with the twist which was needed for normalization.
+#! @Description Computes a pair containing the normalized Chern polynomial together with the twist which is needed to obtain the original
+#! Chern polynomial.
 #! @Returns A list with an integer and a chern polynomial with rank
 #! @Arguments virtual_cohomology_table                  
 DeclareAttribute( "TwistedChernPolynomial",
@@ -286,11 +292,13 @@ DeclareAttribute( "EmbeddingIntoSuperVectorSpace",
 DeclareAttribute( "K0ElementOfStableModuleCategory",
                   IsVirtualHilbertPolynomial );
 
-#! @Description Computes a pair containing the normalized Chern polynomial together with the twist which was needed for normalization.
+#! @Description Computes a pair containing the normalized Chern polynomial together with the twist which is needed to obtain the original
+#! Chern polynomial.
 #! @Returns A list with an integer and a chern polynomial with rank
 #! @Arguments virtual_hilbert_polynomial                  
 DeclareAttribute( "TwistedChernPolynomial",
                   IsVirtualHilbertPolynomial );
+#! @InsertSystem TwistedChernPolynomial_IsVirtualHilbertPolynomial                  
 
 #! @Description Computes the Chern polynomial with rank corresponding to the given Hilbert polynomial
 #! @Returns a chern polynomial with rank
@@ -394,6 +402,7 @@ DeclareOperation( "\<",
 #! @Arguments root_sequence_1, root_sequence_2     
 DeclareOperation( "Infimum",
                   [ IsRootSequence, IsRootSequence ] );
+#! @InsertSystem Infimum                  
 
 #! @Description The input is a list of root sequences. The operation returns the infimum of all elements in the given list.
 #! @Returns a root sequence
@@ -407,6 +416,7 @@ DeclareOperation( "Infimum",
 #! @Arguments root_sequence_1, root_sequence_2                       
 DeclareOperation( "Supremum",
                   [ IsRootSequence, IsRootSequence ] );
+#! @InsertSystem Supremum                  
 
 #! @Description The input is a list of root sequences. The operation returns the supremum of all elements in the given list.
 #! @Returns a root sequence
@@ -458,6 +468,7 @@ DeclareOperation( "AllHilbertPolynomials",
 #! @Arguments interval_of_root_sequences, rank, filter
 DeclareOperation( "AllHilbertPolynomials",
                   [ IsIntervalOfRootSequences, IsInt, IsBool ] );
+#! @InsertSystem AllHilbertPolynomials                  
 
 #! @Description This operation uses the Boij-Soederberg cone. It computes all virtual cohomology tables within the given interval
 #! which cannot be excluded by combinatorial means to be associated to vector bundles with given Hilbert polynomial.
@@ -465,22 +476,26 @@ DeclareOperation( "AllHilbertPolynomials",
 #! @Arguments interval_of_root_sequences, virtual_hilbert_polynomial
 DeclareOperation( "AllCohomologyTables",
                   [ IsIntervalOfRootSequences, IsVirtualHilbertPolynomial ] );
+#! @InsertSystem AllCohomologyTables
 
-
-#! @Description Input: <M>(a, i) \in \mathbb{N}^2</M>. Computes the i-th Macaulay expansion of a.
-#! The output is a list containing pairs <M>[a_j, j]</M> such that <M>i \geq j \geq 1</M> and
-#! a is the sum of the binomial coefficients a_j choose j.
+#! @Description Input: <M>(a, i) \in \mathbb{N}^2</M>. Computes the i-th Macaulay expansion of <M>a</M>, i.e., 
+#! the output is a list <M>[a_l, l]_{l = j .. i}</M> such that <M>i \geq j \geq 1,
+#! a_i > a_{i-1} > ... > a_{j}</M> and
+#! <M>a = \sum_{l = j}^{i}{a_l \choose l}</M>.
 #! @Returns a list
 #! @Arguments a, i
 DeclareOperation( "MacaulayExpansion",
                   [ IsInt, IsInt ] );
+#! @InsertSystem MacaulayExpansion    
 
-#! @Description Input: <M>(a, i) \in \mathbb{N}^2</M>. Let <M>[a_j, j]</M> be the i-th i-th Macaulay expansion of a.
-#! The output is the sum of the binomial coefficients a_j choose j + 1.
+#! @Description Input: <M>(a, i) \in \mathbb{N}^2</M>. Let <M>a = \sum_{l = j}^{i}{a_l \choose l}</M> be the i-th Macaulay
+#! expansion of <M>a</M>.
+#! The output is the sum <M>\sum_{l = j}^{i}{a_l \choose l + 1}</M>.
 #! @Returns an integer
 #! @Arguments a, i                  
 DeclareOperation( "KruskalKatonaFunction",
                   [ IsInt, IsInt ] );
+#! @InsertSystem KruskalKatonaFunction                  
 
 #! @Description Input: an integer. Output: The Hilbert series of the exterior algebra on an <M>n</M>-dimensional space.
 #! @Returns an element of a graded relative ring
@@ -494,42 +509,91 @@ DeclareOperation( "HilbertSeriesOfExteriorAlgebra",
 #! @Arguments dimension
 DeclareOperation( "AllHilbertSeriesOfIdealsOfTheExteriorAlgebra",
                   [ IsInt ] );
-
+                  
+#! TODO
 DeclareOperation( "IsHilbertSeriesOfSubmoduleOfAFreeModuleOverTheExteriorAlgebra",
                   [ IsElementOfGradedRelativeRingRep, IsList ] );
 
+#! @Description The input is a root sequence <M>r</M> and an integer <M>i</M>. The output is the root sequence
+#! corresponding to the <M>i</M>-th twisted virtual cohomology table associated to <M>r</M>.
+#! @Returns a root sequence
+#! @Arguments root_sequence, twist                  
 DeclareOperation( "Twist",
                   [ IsRootSequence, IsInt ] );
+#! @InsertSystem Twist_IsRootSequence
 
+#! @Description The input is an interval of root sequences <M>[ l, r ]</M> and an integer <M>i</M>. The output
+#! is the interval of root sequences <M>[ \mathrm{twist}(l, i), \mathrm{twist}(r, i) ]</M>.
+#! @Returns an interval of root sequences
+#! @Arguments interval_of_root_sequences, twist
 DeclareOperation( "Twist",
                   [ IsIntervalOfRootSequences, IsInt ] );
 
+#! @Description The input is virtual cohomology table <M>t</M> and an integer <M>i</M>. The output
+#! is the <M>i</M>-th twist of <M>t</M>.
+#! @Returns a virtual cohomology table
+#! @Arguments virtual_cohomology_table, twist                 
 DeclareOperation( "Twist",
                   [ IsVirtualCohomologyTable, IsInt ] );
-
+#! @InsertSystem Twist_IsVirtualCohomologyTable
+                  
+#! @Description The input is a virtual Hilbert polynomial <M>p</M> and an integer <M>i</M>. The output is
+#! the <M>i</M>-th twist of <M>p</M>.
+#! @Returns a virtual Hilbert polynomial
+#! @Arguments virtual_hilbert_polynomial, twist
 DeclareOperation( "Twist",
                   [ IsVirtualHilbertPolynomial, IsInt ] );
-
+                  
+#! @Description The input is a Chern polynomial with rank <M>c</M> and an integer <M>i</M>. The output is
+#! the <M>i</M>-th twist of <M>c</M>.
+#! @Returns a Chern polynomial with rank
+#! @Arguments chern_polynomial_with_rank, twist
 DeclareOperation( "Twist",
                   [ IsChernPolynomialWithRank, IsInt ] );
 
+#! @Description The input is a virtual cohomology table <M>c</M> and and integer <M>i</M>. The output
+#! is the Hilbert series of the <M>i</M>-th syzygy object of the Tate resolution associated to
+#! <M>c</M>.
+#! @Returns an element of a graded relative ring
+#! @Arguments virtual_cohomology_table, twist
 DeclareOperation( "K0ElementLift",
                   [ IsVirtualCohomologyTable, IsInt ] );
-
+#! @InsertSystem K0ElementLift
+                  
 DeclareOperation( "PushforwardAlongFiniteMorphism",
                   [ IsVirtualHilbertPolynomial, IsInt ] );
 
+#! @Description The input is a virtual cohomology table <M>c</M> and and integer <M>d</M>.
+#! The output is the virtual cohomology table associated to the pushforward of <M>c</M>.
+#! If there exists a vector bundle <M>F</M> whose cohomology table equals <M>c</M>,
+#! then the output equals the cohomology table of <M>f_{\ast}F</M>, where <M>f</M>
+#! denotes an arbitrary endomorphism of projective space generated by sections of degree <M>d</M>.
+#! @Returns virtual_cohomology_table
+#! @Arguments virtual_cohomology_table, twist                  
 DeclareOperation( "PushforwardAlongFiniteMorphism",
                   [ IsVirtualCohomologyTable, IsInt ] );
+#! @InsertSystem Pushforward_IsVirtualCohomologyTable
 
+                  
+#! @Description The input is a virtual cohomology table <M>c</M> and and integer <M>d</M>.
+#! The output is the virtual cohomology table associated to the pullback of <M>c</M>.
+#! If there exists a vector bundle <M>F</M> whose cohomology table equals <M>c</M>,
+#! then the output equals the cohomology table of <M>f^{\ast}F</M>, where <M>f</M>
+#! denotes an arbitrary endomorphism of projective space generated by sections of degree <M>d</M>.
+#! @Returns virtual_cohomology_table
+#! @Arguments virtual_cohomology_table, twist                   
 DeclareOperation( "PullbackAlongFiniteMorphism",
                   [ IsVirtualCohomologyTable, IsInt ] );
+#! @InsertSystem Pullback_IsVirtualCohomologyTable                  
 
 DeclareOperation( "CohomologyTableOfCotangentBundle",
                   [ IsInt ] );
 
 DeclareOperation( "CohomologyTableOfHorrocksMumfordBundle",
                   [ ] );
+
+DeclareOperation( "CohomologyTableOfStructureSheafOfProjectiveSpace",
+                  [ IsInt ] );
                   
 #################################
 ##
@@ -602,6 +666,14 @@ DeclareOperation( "VirtualCohomologyTable",
 #! @Arguments list, interval_of_root_sequences
 DeclareOperation( "VirtualCohomologyTable",
                   [ IsList, IsIntervalOfRootSequences ] );
+
+#TODO: This has to become an attribute
+#! @Description Computes the virtual cohomology table associated to the virtual vector bundle of rank 1 with supernatural cohomology given by
+#! the root sequence.
+#! @Returns a virtual cohomology table
+#! @Arguments root_sequence
+DeclareOperation( "VirtualCohomologyTable",
+                  [ IsRootSequence ] );                  
 
 #! @Description
 #! The input is an integer <M>n</M>. Constructs the zero virtual cohomology table in <M>\mathbb{P}^n</M>.

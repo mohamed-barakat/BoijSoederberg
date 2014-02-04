@@ -276,7 +276,7 @@ InstallGlobalFunction( _Functor_VectorSpaceOfVirtualCohomologyTables_OnElementar
     fi;
 
     virtual_cohomology_table :=
-      CohomologyTable( root_sequence ) -
+      VirtualCohomologyTable( root_sequence ) -
       VirtualCohomologyTable(
         List( [ 1 .. Length( coefficients ) ], i -> [ coefficients[ i ], TopMaximalHilbertChain( interval_of_root_sequences )[ i ] ] )
       );
@@ -625,17 +625,6 @@ InstallMethod( HilbertPolynomial,
     
     return hilbert_polynomial;
     
-end );
-
-##
-InstallMethod( CohomologyTable,
-               "for a root sequence",
-               [ IsRootSequenceRep ],
-
-  function( root_sequence )
-
-    return VirtualCohomologyTable( [ [ 1, root_sequence ] ] );
-  
 end );
 
 ##
@@ -1036,7 +1025,7 @@ InstallMethod( BoijSoederbergDecomposition,
 
       right_boundary := RightBoundaryOfMinimalInterval( smaller_table );
 
-      supernatural_table := CohomologyTable( right_boundary );
+      supernatural_table := VirtualCohomologyTable( right_boundary );
 
       coefficient := [ ];
 
@@ -1176,13 +1165,21 @@ InstallMethod( TwistedChernPolynomial,
                [ IsVirtualHilbertPolynomialRep ],
 
   function( virtual_hilbert_polynomial )
-    local k0_element, chern_polynomial, chern_class_1, rank, twist;
+    local k0_element, chern_polynomial, coefficients, chern_class_1, rank, twist;
 
     k0_element := K0ElementOfStableModuleCategory( virtual_hilbert_polynomial );
     
     chern_polynomial := ChernPolynomial( k0_element );
 
-    chern_class_1 := Coefficients( chern_polynomial )[1];
+    coefficients := Coefficients( chern_polynomial );
+
+    if coefficients = [ ] then
+
+      return [ chern_polynomial, 0 ];
+    
+    fi;
+    
+    chern_class_1 := coefficients[1];
 
     rank := Rank( chern_polynomial );
 
@@ -1806,7 +1803,7 @@ InstallMethod( AllCohomologyTables,
 
     if Length( set_of_root_sequences ) = 1 then
 
-      candidate_for_integral_point := CohomologyTable( set_of_root_sequences[ 1 ] );
+      candidate_for_integral_point := VirtualCohomologyTable( set_of_root_sequences[ 1 ] );
       
       quotient := UnderlyingPolynomial( virtual_hilbert_polynomial )/ HilbertPolynomial( candidate_for_integral_point );
 
@@ -2568,7 +2565,7 @@ InstallMethod( PullbackAlongFiniteMorphism,
 
   dimension := Dimension( virtual_cohomology_table );
 
-  structure_sheaf := CohomologyTable( RootSequence( List( [ - dimension .. - 1 ], i -> i ) ) );
+  structure_sheaf := VirtualCohomologyTable( RootSequence( List( [ - dimension .. - 1 ], i -> i ) ) );
   
   if degree < 1 then
 
@@ -2632,7 +2629,7 @@ InstallMethod( CohomologyTableOfCotangentBundle,
 
     Add( root_sequence, 0 );
 
-    return dimension * CohomologyTable( Twist( RootSequence( root_sequence ), - 1 ) );
+    return dimension * VirtualCohomologyTable( Twist( RootSequence( root_sequence ), - 1 ) );
   
 end );
 
@@ -2656,6 +2653,17 @@ InstallMethod( CohomologyTableOfHorrocksMumfordBundle,
     return VirtualCohomologyTable( [ [ 2/9, R1 ], [ 7/45, R2 ], [ 56/45, R3 ], [ 7/45, R4 ], [ 14/63, R5 ] ] );
   
 end );
+
+##
+InstallMethod( CohomologyTableOfStructureSheafOfProjectiveSpace,
+               "for an integer",
+               [ IsInt ],
+
+  function( dimension )
+
+    return VirtualCohomologyTable( RootSequence( List( [ -dimension .. -1 ], i -> i ) ) );
+
+end  );
 
 ##################################
 ##
@@ -2945,6 +2953,17 @@ InstallMethod( VirtualCohomologyTable,
 end );
 
 ##
+InstallMethod( VirtualCohomologyTable,
+               "for a root sequence",
+               [ IsRootSequenceRep ],
+
+  function( root_sequence )
+
+    return VirtualCohomologyTable( [ [ 1, root_sequence ] ] );
+
+end );
+
+##
 InstallMethod( ZeroVirtualCohomologyTable,
                "for an integer",
                [ IsInt ],
@@ -2990,7 +3009,7 @@ InstallMethod( VirtualCohomologyTable,
   
     for r in Reversed( [ 1 .. length ] ) do
     
-      supernatural_table := CohomologyTable( list_of_root_sequences[ r ] );
+      supernatural_table := VirtualCohomologyTable( list_of_root_sequences[ r ] );
     
       if r = 1 then
 
