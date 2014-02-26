@@ -102,7 +102,10 @@ DeclareAttribute( "HilbertPolynomial",
 #! @Arguments root_sequence
 DeclareAttribute( "Dual",
                   IsRootSequence );
-#! @InsertSystem Dual_IsRootSequence                  
+#! @InsertSystem Dual_IsRootSequence
+
+DeclareAttribute( "Edges",
+                  IsRootSequence );
                   
 ## IsIntervalOfRootSequences
 #! @Description Returns the category of intervals of root sequences.
@@ -160,6 +163,9 @@ DeclareAttribute( "TopMaximalHilbertChain",
 #! @Arguments interval_of_root_sequences                   
 DeclareAttribute( "KernelEntries",
                   IsIntervalOfRootSequences );
+
+DeclareAttribute( "Dual",
+                  IsIntervalOfRootSequences );
                   
 ## IsMorphismOfIntervalsOfRootSequences
 
@@ -209,13 +215,18 @@ DeclareAttribute( "BettiTable",
 DeclareAttribute( "HilbertPolynomial",
                   IsVirtualCohomologyTable );
 
+#! @Description Computes the interval of the minimal ambient space of the given virtual cohomology table.
+#! @Returns an interval of root sequences
+#! @Arguments virtual_cohomology_table                     
+DeclareAttribute( "IntervalOfMinimalAmbientSpace",
+                  IsVirtualCohomologyTable );
+
 #! @Description Computes the interval spanned by the root sequences of the internal representation.
 #! Note that this is not an attribute of a virtual cohomology table as a mathematical object.
 #! @Returns an interval of root sequences
-#! @Arguments virtual_cohomology_table                     
-# DeclareAttribute( "IntervalOfMinimalAmbientSpace",
+#! @Arguments virtual_cohomology_table
 DeclareAttribute( "IntervalSpannedByRepresentation",
-                  IsVirtualCohomologyTable );
+                  IsVirtualCohomologyTable );                  
 
 #! @Description Computes the smallest right boundary in which the virtual cohomology table lies. If
 #! the input is the zero table, then the function returns the empty list.
@@ -224,6 +235,13 @@ DeclareAttribute( "IntervalSpannedByRepresentation",
 DeclareAttribute( "RightBoundaryOfMinimalInterval",
                   IsVirtualCohomologyTable );
 #! @InsertSystem RightBoundaryOfMinimalInterval_IsVirtualCohomologyTable
+
+#! @Description Computes the smallest left boundary in which the virtual cohomology table lies. If
+#! the input is the zero table, then the function returns the empty list.
+#! @Returns an interval of root sequences
+#! @Arguments virtual_cohomology_table
+DeclareAttribute( "LeftBoundaryOfMinimalInterval",
+                  IsVirtualCohomologyTable );
                   
 #! @Description Computes the Boij Söderberg decomposition of a cohomology table.
 #! @Returns a linear combination of cohomology tables with supernatural cohomology
@@ -381,6 +399,9 @@ DeclareAttribute( "Range",
 ##
 #################################
 
+DeclareOperation( "\+",
+                  [ IsIntervalOfRootSequences, IsIntervalOfRootSequences ] );
+
 #! @Description Computes the value of <A>virtual_hilbert_polynomial</A> at <A>rational</A>
 #! @Returns a rational number
 #! @Arguments virtual_hilbert_polynomial, rational
@@ -440,7 +461,7 @@ DeclareOperation( "\*",
                   [ IsVirtualCohomologyTable, IsRat ] );
 
 DeclareOperation( "\*",
-                  [ IsRat, IsVirtualCohomologyTable ] );
+                  [ IsRat, IsVirtualCohomologyTable ] );                  
                   
 #! @Description The input is a list of root sequences. The operation returns the list of coefficients of the given polynomial up to degree <A>degree</A>.
 #! @Returns a list
@@ -585,6 +606,29 @@ DeclareOperation( "PushforwardAlongFiniteMorphism",
 DeclareOperation( "PullbackAlongFiniteMorphism",
                   [ IsVirtualCohomologyTable, IsInt ] );
 #! @InsertSystem Pullback_IsVirtualCohomologyTable                  
+
+#TODO: TensorProduct
+DeclareOperation( "\*",
+                  [ IsVirtualHilbertPolynomial, IsVirtualHilbertPolynomial ] );
+
+#TODO: TensorProduct
+DeclareOperation( "MaximalRightBoundaryOfIntervalOfTensorProduct",
+                  [ IsIntervalOfRootSequences, IsIntervalOfRootSequences ] );
+
+DeclareOperation( "MaximalLeftBoundaryOfIntervalOfTensorProduct",
+                  [ IsIntervalOfRootSequences, IsIntervalOfRootSequences ] );                  
+
+DeclareOperation( "MaximalIntervalOfTensorProduct",
+                  [ IsIntervalOfRootSequences, IsIntervalOfRootSequences ] );
+
+DeclareOperation( "\*",
+                  [ IsIntervalOfRootSequences, IsIntervalOfRootSequences ] );
+                  
+DeclareOperation( "RegularityIndex",
+                  [ IsVirtualCohomologyTable, IsInt ] );
+
+DeclareOperation( "CoregularityIndex",
+                  [ IsVirtualCohomologyTable, IsInt ] );
 
 DeclareOperation( "CohomologyTableOfCotangentBundle",
                   [ IsInt ] );

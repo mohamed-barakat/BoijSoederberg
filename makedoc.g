@@ -3,6 +3,7 @@ LoadPackage( "AutoDoc" );
 AutoDoc( "BoijSoederberg" :
         
         scaffold := rec( entities := [ "homalg", "GAP4" ],
+                         gapdoc_latex_options := rec( LateExtraPreamble := "\usepacke{tikz-cd}" )
                          ),
         
         autodoc := rec( files := [ "doc/Intros.autodoc" ] ),
@@ -22,6 +23,6 @@ AutoDoc( "BoijSoederberg" :
 );
 
 # Create VERSION file for "make towww"
-PrintTo( "VERSION", PackageInfo( "Blocks" )[1].Version );
+PrintTo( "VERSION", PackageInfo( "BoijSoederberg" )[1].Version );
 
 QUIT;

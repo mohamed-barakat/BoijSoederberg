@@ -651,6 +651,40 @@ InstallMethod( Dual,
                
 end );
 
+##
+InstallMethod( Edges,
+               "for a root sequence",
+               [ IsRootSequenceRep ],
+
+  function( root_sequence )
+    local strictly_decreasing_integer_sequence, length, edges, i;
+
+    length := LengthOfRootSequences( UnderlyingPosetOfRootSequences( root_sequence ) );
+    
+    strictly_decreasing_integer_sequence := root_sequence!.StrictlyDecreasingIntegerSequence;
+
+    edges := [ ];
+
+    for i in [ 1 .. length ] do
+
+      if not ( strictly_decreasing_integer_sequence[i] + 1 ) in strictly_decreasing_integer_sequence then
+
+        Add( edges, [ i - 1, strictly_decreasing_integer_sequence[i] + 1 ] );
+      
+      fi;
+
+      if not ( strictly_decreasing_integer_sequence[i] - 1 ) in strictly_decreasing_integer_sequence then
+  
+        Add( edges, [ i, strictly_decreasing_integer_sequence[i] - 1 ] );
+      
+      fi;
+    
+    od;
+
+    return Set( edges );
+  
+end );
+
 ## IsIntervalOfRootSequences
 ##
 InstallMethod( UnderlyingSet,
@@ -801,6 +835,24 @@ InstallMethod( KernelEntries,
 
 end );
 
+##
+InstallMethod( Dual,
+               "for an interval of root sequences",
+               [ IsIntervalOfRootSequences ],
+
+  function( interval_of_root_sequences )
+    local dual_interval_of_root_sequences;
+
+    dual_interval_of_root_sequences := IntervalOfRootSequences(
+      Dual( RightBoundary( interval_of_root_sequences ) ), Dual( LeftBoundary( interval_of_root_sequences ) )
+    );
+
+    SetDual( dual_interval_of_root_sequences, interval_of_root_sequences );
+
+    return dual_interval_of_root_sequences;
+
+end  );
+
 ## IsVirtualCohomologyTable
 ##
 InstallMethod( K0ElementOfStableModuleCategory,
@@ -901,6 +953,17 @@ InstallMethod( IntervalSpannedByRepresentation,
 end );
 
 ##
+InstallMethod( IntervalOfMinimalAmbientSpace,
+               "for a virtual cohomology table",
+               [ IsVirtualCohomologyTableRep ],
+
+  function( virtual_cohomology_table )
+
+    return IntervalOfRootSequences( LeftBoundaryOfMinimalInterval( virtual_cohomology_table ), RightBoundaryOfMinimalInterval( virtual_cohomology_table ) );
+  
+end );
+
+##
 InstallMethod( HilbertPolynomial,
                "for a virtual cohomology table",
                [ IsVirtualCohomologyTableRep ],
@@ -913,7 +976,7 @@ end );
 
 ##
 InstallMethod( BettiTable,
-               "for a virutal character table",
+               "for a virtual character table",
                [ IsVirtualCohomologyTableRep ],
 
   function( virtual_cohomology_table )
@@ -996,6 +1059,17 @@ InstallMethod( RightBoundaryOfMinimalInterval,
     od;
     
     return RootSequence( right_boundary );
+  
+end );
+
+##
+InstallMethod( LeftBoundaryOfMinimalInterval,
+               "for a virtual cohomology table",
+               [ IsVirtualCohomologyTableRep ],
+
+  function( virtual_cohomology_table )
+
+    return Dual( RightBoundaryOfMinimalInterval( Dual( virtual_cohomology_table ) ) );
   
 end );
 
@@ -1282,7 +1356,7 @@ end );
 ##
 InstallMethod( Dual,
                "for a virtual Hilbert polynomial",
-               [ IsVirtualHilbertPolynomial ],
+               [ IsVirtualHilbertPolynomialRep ],
 
   function( virtual_hilbert_polynomial )
     local dimension, t, dual_virtual_hilbert_polynomial;
@@ -1457,6 +1531,20 @@ InstallMethod( \*,
 
      return VirtualHilbertPolynomial( rational * UnderlyingPolynomial( virtual_hilbert_polynomial ) );
 
+end );
+
+##
+InstallMethod( \+,
+               "for a pair of intervals of root sequences",
+               [ IsIntervalOfRootSequences, IsIntervalOfRootSequences ],
+
+  function( interval_of_root_sequences1, interval_of_root_sequences2 )
+
+    return IntervalOfRootSequences(
+             Infimum( LeftBoundary( interval_of_root_sequences1 ), LeftBoundary( interval_of_root_sequences2 ) ),
+             Supremum( RightBoundary( interval_of_root_sequences1 ), RightBoundary( interval_of_root_sequences2 ) )
+           );
+           
 end );
 
 ## TODO
@@ -2420,7 +2508,10 @@ InstallMethod( K0ElementLift,
 
     while k0_upper_bound > upper_bound do
 
-      k0_element := k0_element - coefficient[ 1 ] * VerticalShift( hilbert_series_of_exterior_algebra, coefficient[ 2 ] );
+      #TODO: Multiplication!
+      k0_element := k0_element -
+        ElementOfGradedRelativeRing( [ [ coefficient[ 1 ], 0 ] ], dimension + 1 )
+        * VerticalShift( hilbert_series_of_exterior_algebra, coefficient[ 2 ] );
 
       k0_list_of_coefficients := EvalRingElement( HomogeneousParts( k0_element ) );
 
@@ -2436,7 +2527,10 @@ InstallMethod( K0ElementLift,
 
     while k0_lower_bound < lower_bound do
 
-      k0_element := k0_element - coefficient[ 1 ] * VerticalShift( hilbert_series_of_exterior_algebra, coefficient[ 2 ] + ( dimension + 1 ) );
+      #TODO: Multiplication!
+      k0_element := k0_element -
+        ElementOfGradedRelativeRing( [ [ coefficient[ 1 ], 0 ] ], dimension + 1 )
+        * VerticalShift( hilbert_series_of_exterior_algebra, coefficient[ 2 ] + ( dimension + 1 ) );
 
       k0_list_of_coefficients := EvalRingElement( HomogeneousParts( k0_element ) );
 
@@ -2461,8 +2555,11 @@ InstallMethod( K0ElementLift,
       coefficient := coefficient[ 1 ][ 1 ];
 
     fi;
-    
-    k0_element := k0_element + ( lowest_socle[ 2 ] - coefficient ) * VerticalShift( hilbert_series_of_exterior_algebra, lowest_socle[ 1 ] + ( dimension + 1 ) );
+
+    #TODO: Multiplication!
+    k0_element := k0_element +
+    ElementOfGradedRelativeRing( [ [ ( lowest_socle[ 2 ] - coefficient ), 0 ] ], dimension + 1 )
+    * VerticalShift( hilbert_series_of_exterior_algebra, lowest_socle[ 1 ] + ( dimension + 1 ) );
     
     #3.Step: adjust the generators
 
@@ -2615,6 +2712,105 @@ InstallMethod( PullbackAlongFiniteMorphism,
     
   return VirtualCohomologyTable( function_of_pullback, TopMaximalChain( interval_of_pullback ) );
 
+end );
+
+##
+InstallMethod( \*,
+               "for a pair of virtual Hilbert polynomials",
+               [ IsVirtualHilbertPolynomialRep, IsVirtualHilbertPolynomialRep ],
+
+  function( virtual_hilbert_polynomial1, virtual_hilbert_polynomial2 )
+
+    return VirtualHilbertPolynomial(
+      HilbertPolynomial(
+        K0ElementOfStableModuleCategory( virtual_hilbert_polynomial1 ) * K0ElementOfStableModuleCategory( virtual_hilbert_polynomial2 )
+      )
+    );
+  
+end  );
+
+##
+InstallMethod( RegularityIndex,
+               "for a virtual cohomology table and an integer",
+               [ IsVirtualCohomologyTableRep, IsInt ],
+
+  function( virtual_cohomology_table, k )
+  
+    return RightBoundaryOfMinimalInterval( virtual_cohomology_table )[ k + 1 ] + ( k + 1 );
+  
+end  );
+
+##
+InstallMethod( CoregularityIndex,
+               "for a virtual cohomology table and an integer",
+               [ IsVirtualCohomologyTableRep, IsInt ],
+
+  function( virtual_cohomology_table, k )
+    local dimension;
+
+    dimension := Dimension( virtual_cohomology_table );
+
+    return LeftBoundaryOfMinimalInterval( virtual_cohomology_table )[ dimension - k ] +   dimension - ( k + 1 );
+
+end  );
+
+##
+InstallMethod( MaximalRightBoundaryOfIntervalOfTensorProduct,
+               "for a pair of intervals of root sequences",
+               [ IsIntervalOfRootSequencesRep, IsIntervalOfRootSequencesRep ],
+
+  function( interval_of_root_sequences1, interval_of_root_sequences2 )
+    local dimension, root_sequence, p;
+
+    dimension := LengthOfRootSequences( UnderlyingPosetOfRootSequences( interval_of_root_sequences1 ) );
+
+    root_sequence := [ ];
+
+    for p in [ 0 .. dimension - 1 ] do
+
+      root_sequence[ p + 1 ] := Minimum( List( [ 0 .. p ], i ->
+        RightBoundary( interval_of_root_sequences1 )[ i + 1 ] + RightBoundary( interval_of_root_sequences2 )[ p - i + 1 ] )
+      ) + 1;
+    od;
+
+    return RootSequence( root_sequence );
+  
+end );
+
+##
+InstallMethod( MaximalLeftBoundaryOfIntervalOfTensorProduct,
+               "for a pair of intervals of root sequences",
+               [ IsIntervalOfRootSequencesRep, IsIntervalOfRootSequencesRep ],
+
+  function( interval_of_root_sequences1, interval_of_root_sequences2 )
+
+    return Dual( MaximalRightBoundaryOfIntervalOfTensorProduct( Dual( interval_of_root_sequences1 ), Dual( interval_of_root_sequences2 ) ) );
+
+end );
+
+##
+InstallMethod( MaximalIntervalOfTensorProduct,
+               "for a pair of intervals of root sequences",
+               [ IsIntervalOfRootSequencesRep, IsIntervalOfRootSequencesRep ],
+
+  function( interval_of_root_sequences1, interval_of_root_sequences2 )
+
+    return IntervalOfRootSequences(
+      MaximalLeftBoundaryOfIntervalOfTensorProduct( interval_of_root_sequences1, interval_of_root_sequences2 ),
+      MaximalRightBoundaryOfIntervalOfTensorProduct( interval_of_root_sequences1, interval_of_root_sequences2 )
+    );
+
+end );
+
+##
+InstallMethod( \*,
+               "for a pair of intervals of root sequences",
+               [ IsIntervalOfRootSequencesRep, IsIntervalOfRootSequencesRep ],
+
+  function( interval_of_root_sequences1, interval_of_root_sequences2 )
+
+    return MaximalIntervalOfTensorProduct( interval_of_root_sequences1, interval_of_root_sequences2 );
+    
 end );
 
 ##
