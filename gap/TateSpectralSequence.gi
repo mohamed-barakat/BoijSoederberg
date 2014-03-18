@@ -269,6 +269,54 @@ InstallMethod( \*,
   
 end );           
 
+
+InstallMethod( SpectralSequenceOfHorrocksMumfordBundle,
+                  [ ],
+
+  function( )
+    local first_page, second_page;
+    
+    first_page := CohomologyTableOfHorrocksMumfordBundle( );
+    
+    second_page := VirtualTateSpectralSequencePage(
+      [
+        [ 4, -6, ElementOfGradedRelativeRing( [ [ 20, -3 ], [ 35, -2 ], [ 15, -1 ] ], 5 ) ],
+
+        [ 4, -7, ElementOfGradedRelativeRing( [ [ 2, -5 ] ], 5 ) ],
+
+        [ 4, -5, ElementOfGradedRelativeRing( [ [ 4, 0 ] ], 5 ) ],
+
+        [ 3, -4, ElementOfGradedRelativeRing( [ [ 20, -3 ], [ 35, -2 ], [ 15, -1 ] ], 5 ) ],
+
+        [ 3, -5, ElementOfGradedRelativeRing( [ [ 2, -5 ] ], 5 ) ],
+
+        [ 3, -3, ElementOfGradedRelativeRing( [ [ 4, 0 ] ], 5 ) ],
+
+        [ 3, -2, ElementOfGradedRelativeRing( [ [ 2, 0 ], [ 10, 1 ], [ 15, 2 ], [ 5, 3 ] ], 5 ) ],
+
+        [ 2, 0, ElementOfGradedRelativeRing( [ [ 2, 0 ], [ 10, 1 ], [ 20, 2 ], [ 20, 3 ], [ 10, 4 ], [ 2, 5 ] ], 5 ) ],
+
+        [ 1, 2, ElementOfGradedRelativeRing( [ [ 5, 2 ], [ 15, 3 ], [ 10, 4 ], [ 2, 5 ] ], 5 ) ],
+
+        [ 1, 3, ElementOfGradedRelativeRing( [ [ 4, 5 ] ], 5 ) ],
+
+        [ 0, 5, ElementOfGradedRelativeRing( [ [ 4, 5 ] ], 5 ) ],
+
+        [ 1, 4, ElementOfGradedRelativeRing( [ [ 15, 6 ], [ 35, 7 ], [ 20, 8 ] ], 5 ) ],
+
+        [ 0, 6, ElementOfGradedRelativeRing( [ [ 15, 6 ], [ 35, 7 ], [ 20, 8 ] ], 5 ) ],
+
+        [ 1, 5, ElementOfGradedRelativeRing( [ [ 2, 10 ] ], 5 ) ],
+
+        [ 0, 7, ElementOfGradedRelativeRing( [ [ 2, 10 ] ], 5 ) ]
+        
+      ], 4
+    );
+    
+    return VirtualTateSpectralSequence( [ first_page, second_page ] );
+  
+end );
+
 ##################################
 ##
 ## Constructors

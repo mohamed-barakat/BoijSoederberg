@@ -55,6 +55,9 @@ DeclareOperation( "\*",
 DeclareOperation( "SpectralSequencePage",
                   [ IsVirtualTateSpectralSequence, IsInt ] );
 
+DeclareOperation( "SpectralSequenceOfHorrocksMumfordBundle",
+                  [ ] );                  
+
 #################################
 ##
 #! @Section Constructors
